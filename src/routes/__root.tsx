@@ -1,11 +1,8 @@
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { useNavigate } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
 import { MainMenu } from '@/components/main-menu/main-menu'
 
 const RootLayout = () => {
-  const navigate = useNavigate()
   
   return(
   <>

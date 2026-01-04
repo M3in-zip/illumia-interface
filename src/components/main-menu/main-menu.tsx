@@ -1,39 +1,21 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
 import { useNavigate } from "@tanstack/react-router";
+import { ImageButton } from "@components/image-button";
 
 export const MainMenu = () => {
   const navigate = useNavigate();
   {/* <NavigationMenuLink onClick={() => navigate({ to: "/" })}>Home</NavigationMenuLink> */}
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Home</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink onClick={() => navigate({ to: "/" })}>Home</NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>About</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink onClick={() => navigate({ to: "/about" })}>
-              About
-            </NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-
-      </NavigationMenuList>
-    </NavigationMenu>
+    <div className="flex flex-row w-full">
+      <ImageButton
+        buttonImgSrc="/images/hamburger-menu.png"
+        onClick={() => console.log("Menu clicked")}
+      />
+      <ImageButton
+        buttonImgSrc="/images/profile-icon.png"
+        onClick={() => console.log("Profile clicked")}
+        className="ml-auto"
+      />
+    </div>
   );
 };
 

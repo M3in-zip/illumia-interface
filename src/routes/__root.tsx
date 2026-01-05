@@ -5,14 +5,14 @@ import { MainMenu } from '@/components/main-menu/main-menu'
 const RootLayout = () => {
   
   return(
-  <>
-    <div className="p-2 flex gap-2">
-      <MainMenu />
-    </div>
+  <div className="flex flex-col min-h-screen">
+    <MainMenu />
     <hr />
-    <Outlet />
+    <main className="flex-1 bg-[url('/images/main-menu-bg.png')] bg-cover bg-center">
+      <Outlet />
+    </main>
     <TanStackRouterDevtools />
-  </>
+  </div>
 )}
 
 export const Route = createRootRoute({ component: RootLayout })

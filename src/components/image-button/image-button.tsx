@@ -9,7 +9,7 @@ export const ImageButton = ({ buttonImgSrc, onHoverImgSrc, onClick, className }:
   const cssClass = className ? className + " cursor-pointer" : "cursor-pointer";
   return (
     <button onClick={onClick} className={cssClass}>
-        {buttonImgSrc && <img className="h-12 pixel-art" src={buttonImgSrc} />} {/* modify height it will be a fixed value */}
+        {buttonImgSrc && <img className="h-12 w-full pixel-art" src={buttonImgSrc} />} {/* modify height it will be a fixed value */}
     </button>
   );
 };

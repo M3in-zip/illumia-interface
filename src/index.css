@@ -126,3 +126,9 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+.main-menu-bg {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  @apply bg-[url(/images/main-menu-bg.png)] bg-scroll bg-no-repeat bg-cover;
+}

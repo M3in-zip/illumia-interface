@@ -16,6 +16,11 @@ export const MainMenu = () => {
         className="ml-4"
       />
       <ImageButton
+        buttonImgSrc="/images/about-icon.png"
+        onClick={() => navigate({ to: "/about" })}
+        className="ml-4"
+      />
+      <ImageButton
         buttonImgSrc="/images/profile-icon.png"
         onClick={() => console.log("Profile clicked")}
         className="ml-auto"

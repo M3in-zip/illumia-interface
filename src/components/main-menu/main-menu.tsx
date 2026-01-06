@@ -9,11 +9,11 @@ export const MainMenu = () => {
       <ImageButton
         background="/images/bg-button.png"
         onClick={() => console.log("Menu clicked")}
-        widthClass="w-12"
       />
       <ImageButton
         background="/images/bg-button.png"
         onClick={() => navigate({ to: "/" })}
+        text="Home"
       />
 
       {/* profile button */}
@@ -21,7 +21,6 @@ export const MainMenu = () => {
         background="/images/bg-button.png"
         onClick={() => console.log("Profile clicked")}
         className="ml-auto"
-        widthClass="w-12"
       />
     </div>
   );

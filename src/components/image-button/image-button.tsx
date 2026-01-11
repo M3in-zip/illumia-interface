@@ -23,7 +23,7 @@ export const ImageButton = ({
     "rounded-xl",
     "overflow-hidden",
     "border-2",
-    "border-[#fde2ab]",
+    "border-[#231f20]",
     "px-4",
     heightClass,
     className,
@@ -34,15 +34,25 @@ export const ImageButton = ({
   return (
     <button onClick={onClick} className={cssClass}>
       {background && (
-        <img
-          className="absolute top-0 left-1/2 h-full w-auto -translate-x-1/2 object-cover pixel-art"
-          src={background}
-        />
+        <>
+          <img
+            className="absolute top-0 left-1/2 h-full w-auto -translate-x-1/2 object-cover pixel-art"
+            src={background}
+          />
+        </>
       )}
       {(icon || text) && (
         <span className="relative z-10 flex items-center">
-          {icon && <i className={`${icon} text-[#fde2ab] ${text ? "mr-2" : ""}`}></i>}
-          {text && <span className="text-[#fde2ab] font-bold">{text}</span>}
+          {icon && (
+            <i
+              className={`${icon} text-[#231f20] ${text ? "mr-2" : ""}`}
+            ></i>
+          )}
+          {text && (
+            <span className="text-[#231f20] font-bold">
+              {text}
+            </span>
+          )}
         </span>
       )}
     </button>

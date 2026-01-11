@@ -9,32 +9,32 @@ export const MainMenu = () => {
   return (
     <div className="flex flex-row flex-wrap w-full gap-2 p-2 bg-[#aba59d]">
       <ImageButton
-        background="/images/bg-button.png"
+        background="/images/bg-grass.png"
         onClick={toggleSidebar}
         icon="fa-solid fa-bars"
       />
       <ImageButton
-        background="/images/bg-button.png"
+        background="/images/bg-grass.png"
         onClick={() => navigate({ to: "/" })}
         text="Home"
         icon="fa-solid fa-house"
       />
       <ImageButton
-        background="/images/bg-button.png"
+        background="/images/bg-grass.png"
         onClick={() => navigate({ to: "/calculator" })}
         text="Calculator"
         icon="fa-solid fa-calculator"
       />
       <ImageButton
-        background="/images/bg-button.png"
+        background="/images/bg-grass.png"
         onClick={() => navigate({ to: "/leaderboard" })}
         text="Leaderboard"
         icon="fa-solid fa-trophy"
       />
 
-      {/* profile button */}
+      {/* profilg-button */}
       <ImageButton
-        background="/images/bg-button.png"
+        background="/images/bg-grass.png"
         onClick={() => console.log("Profile clicked")}
         className="ml-auto"
         icon="fa-solid fa-user"

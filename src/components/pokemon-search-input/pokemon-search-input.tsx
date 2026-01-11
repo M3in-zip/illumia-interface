@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from "react";
 import { usePokemonStore } from "@/stores/pokemonStore";
 
 export const PokemonSearchInput = () => {
   const [search, setSearch] = useState("");
   const pokemonList = usePokemonStore((state) => state.pokemonList);
 
-  const displayList = search.length > 0 
-    ? pokemonList.filter((p) => p.name.toLowerCase().startsWith(search.toLowerCase()))
-    : pokemonList;
+  const displayList = useMemo(() => {
+      if (search.length === 0) return pokemonList;
+      const lowerSearch = search.toLowerCase();
+      return pokemonList.filter((p) =>
+        p.name.toLowerCase().startsWith(lowerSearch)
+      );
+    },
+    [search, pokemonList]
+  );
 
   return (
     <div className="relative w-full max-w-sm">
       {/* Input di ricerca */}
       <div className="relative flex items-center">
-        <i className="fa-solid fa-search absolute left-3 text-slate-400"></i> {/* lente colorata grigia */}
+        <i className="fa-solid fa-search absolute left-3 text-slate-400"></i>{" "}
+        {/* lente colorata grigia */}
         <input
           type="text"
           value={search}
@@ -24,12 +31,13 @@ export const PokemonSearchInput = () => {
       </div>
 
       {/* Contenitore Lista con Scrollbar */}
-      <ul className="absolute z-10 w-full bg-white border-x border-b border-slate-200 rounded-b-lg shadow-xl 
-                     max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300">
-        
+      <ul
+        className="absolute z-10 w-full bg-white border-x border-b border-slate-200 rounded-b-lg shadow-xl 
+                     max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300"
+      >
         {displayList.length > 0 ? (
           displayList.map((pokemon) => (
-            <li 
+            <li
               key={pokemon.id}
               className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center border-b border-slate-50 last:border-none transition-colors"
               onClick={() => {
@@ -37,8 +45,12 @@ export const PokemonSearchInput = () => {
                 console.log("Selezionato:", pokemon.name);
               }}
             >
-              <span className="text-[10px] font-bold text-slate-400 w-8">#{pokemon.id}</span>
-              <span className="capitalize text-slate-700 font-medium">{pokemon.name}</span>
+              <span className="text-[10px] font-bold text-slate-400 w-8">
+                #{pokemon.id}
+              </span>
+              <span className="capitalize text-slate-700 font-medium">
+                {pokemon.name}
+              </span>
             </li>
           ))
         ) : (

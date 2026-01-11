@@ -3,10 +3,11 @@ import { usePokemonStore } from "@/stores/pokemonStore";
 
 interface pokemonSearchInputProps {
   onClick?: (pokemonName: string) => void;
+  defaultValue?: string;
 }
 
-export const PokemonSearchInput = ({ onClick }: pokemonSearchInputProps) => {
-  const [search, setSearch] = useState("");
+export const PokemonSearchInput = ({ onClick, defaultValue }: pokemonSearchInputProps) => {
+  const [search, setSearch] = useState(defaultValue || "");
   const [isFocused, setIsFocused] = useState(false);
   const pokemonList = usePokemonStore((state) => state.pokemonList);
 

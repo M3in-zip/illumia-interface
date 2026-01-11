@@ -12,10 +12,11 @@ export const ImageButton = ({
   background,
   onClick,
   className,
-  heightClass = "h-12",
+  heightClass="min-h-[clamp(2.75rem,6vw,3.25rem)]",
   text,
   icon,
 }: ImageButtonProps) => {
+  
   const cssClass = [
     "relative",
     "cursor-pointer",
@@ -24,7 +25,8 @@ export const ImageButton = ({
     "overflow-hidden",
     "border-2",
     "border-[#231f20]",
-    "px-4",
+    "px-[clamp(0.75rem,2vw,1.25rem)]",
+    "py-[clamp(0.5rem,1.5vw,0.75rem)]",
     heightClass,
     className,
   ]
@@ -45,11 +47,11 @@ export const ImageButton = ({
         <span className="relative z-10 flex items-center">
           {icon && (
             <i
-              className={`${icon} text-[#231f20] ${text ? "mr-2" : ""}`}
+              className={`${icon} text-[#231f20] text-[1.25em] ${text ? "mr-2" : ""}`}
             ></i>
           )}
           {text && (
-            <span className="text-[#231f20] font-bold">
+            <span className="text-[#231f20] font-bold text-[clamp(0.875rem,1.5vw,1.25rem)]">
               {text}
             </span>
           )}

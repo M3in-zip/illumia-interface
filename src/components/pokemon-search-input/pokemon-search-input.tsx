@@ -1,64 +1,71 @@
 import { useState, useMemo } from "react";
 import { usePokemonStore } from "@/stores/pokemonStore";
 
-export const PokemonSearchInput = () => {
+interface pokemonSearchInputProps {
+  onClick?: (pokemonName: string) => void;
+}
+
+export const PokemonSearchInput = ({ onClick }: pokemonSearchInputProps) => {
   const [search, setSearch] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const pokemonList = usePokemonStore((state) => state.pokemonList);
 
   const displayList = useMemo(() => {
-      if (search.length === 0) return pokemonList;
-      const lowerSearch = search.toLowerCase();
-      return pokemonList.filter((p) =>
-        p.name.toLowerCase().startsWith(lowerSearch)
-      );
-    },
-    [search, pokemonList]
-  );
+    if (search.length === 0) return pokemonList;
+    const lowerSearch = search.toLowerCase();
+    return pokemonList.filter((p) =>
+      p.name.toLowerCase().startsWith(lowerSearch)
+    );
+  }, [search, pokemonList]);
 
   return (
-    <div className="relative w-full max-w-sm">
+    <div className="relative w-48 max-w-sm">
       {/* Input di ricerca */}
       <div className="relative flex items-center">
-        <i className="fa-solid fa-search absolute left-3 text-slate-400"></i>{" "}
-        {/* lente colorata grigia */}
+        <i className="fa-solid fa-search absolute left-3 text-slate-400"></i>{" "} {/* gray icon lens */}
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search Pokémon..."
           className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-t-lg focus:outline-none bg-white"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
       </div>
 
-      {/* Contenitore Lista con Scrollbar */}
-      <ul
-        className="absolute z-10 w-full bg-white border-x border-b border-slate-200 rounded-b-lg shadow-xl 
+      {/* autocomplete list */}
+      {isFocused && (
+        <ul
+          className="absolute z-10 w-full bg-white border-x border-b border-slate-200 rounded-b-lg shadow-xl 
                      max-h-[240px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300"
-      >
-        {displayList.length > 0 ? (
-          displayList.map((pokemon) => (
-            <li
-              key={pokemon.id}
-              className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center border-b border-slate-50 last:border-none transition-colors"
-              onClick={() => {
-                setSearch(pokemon.name);
-                console.log("Selezionato:", pokemon.name);
-              }}
-            >
-              <span className="text-[10px] font-bold text-slate-400 w-8">
-                #{pokemon.id}
-              </span>
-              <span className="capitalize text-slate-700 font-medium">
-                {pokemon.name}
-              </span>
+        >
+          {displayList.length > 0 ? (
+            displayList.map((pokemon) => (
+              <li
+                key={pokemon.id}
+                className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center border-b border-slate-50 last:border-none transition-colors"
+                onMouseDown={(e) => {
+                  setSearch(pokemon.name);
+                  if (onClick) onClick(pokemon.name);
+                  setIsFocused(false); 
+                }}
+              >
+                <span className="text-[10px] font-bold text-slate-400 w-8">
+                  #{pokemon.id}
+                </span>
+                <span className="capitalize text-slate-700 font-medium">
+                  {pokemon.name}
+                </span>
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-8 text-center text-slate-400 text-sm">
+              Nessun Pokémon trovato
             </li>
-          ))
-        ) : (
-          <li className="px-4 py-8 text-center text-slate-400 text-sm">
-            Nessun Pokémon trovato
-          </li>
-        )}
-      </ul>
+          )}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,5 +1,3 @@
-import { ImageButton } from "../image-button";
-
 interface SidebarProps {
   visible: boolean;
 }
@@ -19,12 +17,6 @@ export const SidebarMenu = ({ visible }: SidebarProps) => {
       <div className="w-[250px] p-4">
         Sidebar
       </div>
-      <ImageButton
-        background="/images/bg-button.png"
-        onClick={() => console.log("Sidebar button clicked")}
-        icon="fa-solid fa-home"
-        text="Dashboard"
-      />
     </div>
   );
 };

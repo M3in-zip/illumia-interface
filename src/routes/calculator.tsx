@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { getPokemonBaseList } from "@/api/pokemon.ts";
 import { usePokemonStore } from "@/stores/pokemonStore";
 import { FullPageSpinner } from "@/components/full-page-spinner";
+import { PokemonBuild } from "@/components/pokemon-build";
 
 export const Route = createFileRoute("/calculator")({
   component: PokemonCalculator,
@@ -35,8 +36,7 @@ function PokemonCalculator() {
   return (
     <div className="p-2">
       {isLoading && <FullPageSpinner />}
-      <h1 className="text-xl font-bold mb-2">Pokémon</h1>
-      {/* <img src={data.sprites.front_default} alt={data.name} className="w-48 h-48 pixel-art" /> */}
+      <PokemonBuild />
     </div>
   );
 }

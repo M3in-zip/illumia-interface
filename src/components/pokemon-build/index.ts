@@ -1,0 +1,1 @@
+export { PokemonBuild } from './pokemon-build';

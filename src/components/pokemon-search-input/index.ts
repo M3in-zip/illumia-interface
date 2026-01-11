@@ -1,0 +1,1 @@
+export { PokemonSearchInput } from './pokemon-search-input';

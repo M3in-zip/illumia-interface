@@ -32,7 +32,7 @@ export const SpriteStats = ({ sprite, stats }: SpriteStatsProps) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-4 w-full">
+    <div className="flex flex-col md:flex-row items-center gap-4 w-full p-2">
       <img
         src={sprite}
         alt="Pokemon sprite"

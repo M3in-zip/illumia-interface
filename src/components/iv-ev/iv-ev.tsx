@@ -60,10 +60,10 @@ export const IV_EV = () => {
   const inputClassName = "border-2 w-[clamp(3rem,6vw,8rem)] rounded-md";
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row p-2 gap-2">
       {/* IVs */}
       <div className="grid grid-cols-2 gap-2">
-        <label>IV/EV Value (0-31):</label>
+        <label>IV (0-31):</label>
         <label></label>
         <label>HP : </label>
         <input
@@ -128,7 +128,7 @@ export const IV_EV = () => {
       </div>
       {/* EVs */}
       <div className="grid grid-cols-2 gap-2">
-        <label>EV Value (0-252):</label>
+        <label>EV (0-252):</label>
         <label></label>
         <label>HP : </label>
         <input

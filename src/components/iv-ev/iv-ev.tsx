@@ -1,151 +1,196 @@
 import { useState } from "react";
 
 type Stat = "HP" | "Attack" | "Defense" | "Sp. Atk" | "Sp. Def" | "Speed";
+type StatValue = number | "";
 
 export const IV_EV = () => {
-  const [HP_IV, setHP_IV] = useState(0);
-  const [HP_EV, setHP_EV] = useState(0);
-  const [Attack_IV, setAttack_IV] = useState(0);
-  const [Attack_EV, setAttack_EV] = useState(0);
-  const [Defense_IV, setDefense_IV] = useState(0);
-  const [Defense_EV, setDefense_EV] = useState(0);
-  const [SpAtk_IV, setSpAtk_IV] = useState(0);
-  const [SpAtk_EV, setSpAtk_EV] = useState(0);
-  const [SpDef_IV, setSpDef_IV] = useState(0);
-  const [SpDef_EV, setSpDef_EV] = useState(0);
-  const [Speed_IV, setSpeed_IV] = useState(0);
-  const [Speed_EV, setSpeed_EV] = useState(0);
-  const totalEV = HP_EV + Attack_EV + Defense_EV + SpAtk_EV + SpDef_EV + Speed_EV;
+  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({
+    HP: 0,
+    Attack: 0,
+    Defense: 0,
+    "Sp. Atk": 0,
+    "Sp. Def": 0,
+    Speed: 0,
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, stat: Stat, type: "IV" | "EV") => {
-    const value = parseInt(e.target.value);
+  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({
+    HP: 0,
+    Attack: 0,
+    Defense: 0,
+    "Sp. Atk": 0,
+    "Sp. Def": 0,
+    Speed: 0,
+  });
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    stat: Stat,
+    type: "IV" | "EV"
+  ) => {
+    var nextValue = e.target.value ? parseInt(e.target.value) : "";
+    const numericValue = typeof nextValue === "number" ? nextValue : 0;
+    
     if (type === "IV") {
-      if (stat === "HP") setHP_IV(value);
-      if (stat === "Attack") setAttack_IV(value);
-      if (stat === "Defense") setDefense_IV(value);
-      if (stat === "Sp. Atk") setSpAtk_IV(value);
-      if (stat === "Sp. Def") setSpDef_IV(value);
-      if (stat === "Speed") setSpeed_IV(value);
-
+      if (numericValue > 31) nextValue = 31;
+      setIVs((prev) => ({ ...prev, [stat]: nextValue }));
     } else {
-      if (stat === "HP" && (totalEV < 510 || (value-HP_EV < 0))) setHP_EV(value);
-      if (stat === "Attack" && (totalEV < 510 || (value-Attack_EV < 0))) setAttack_EV(value);
-      if (stat === "Defense" && (totalEV < 510 || (value-Defense_EV < 0))) setDefense_EV(value);
-      if (stat === "Sp. Atk" && (totalEV < 510 || (value-SpAtk_EV < 0))) setSpAtk_EV(value);
-      if (stat === "Sp. Def" && (totalEV < 510 || (value-SpDef_EV < 0))) setSpDef_EV(value);
-      if (stat === "Speed" && (totalEV < 510 || (value-Speed_EV < 0))) setSpeed_EV(value);
+      if (numericValue > 252) nextValue = 252;
+      const totalEVWithoutCurrent = Object.entries(EVs).reduce(
+        (acc, [key, val]) =>
+          acc + (key === stat ? 0 : typeof val === "number" ? val : 0),
+        0
+      );
+      const newTotalEV = totalEVWithoutCurrent + numericValue;
+      if (newTotalEV < 509) setEVs((prev) => ({ ...prev, [stat]: nextValue }));
     }
   };
 
+  const handleBlur = (stat: Stat, type: "IV" | "EV") => {
+    if (type === "IV") {
+      if (IVs[stat] === "") {
+        setIVs((prev) => ({ ...prev, [stat]: 0 }));
+      }
+    } else {
+      if (EVs[stat] === "") {
+        setEVs((prev) => ({ ...prev, [stat]: 0 }));
+      }
+    }
+  };
+
+  const inputClassName = "border-2 w-[clamp(3rem,6vw,8rem)] rounded-md";
+
   return (
     <div className="flex flex-row">
-        {/* IVs */}
-        <div className="grid grid-cols-2 gap-2">
-          <label>IV/EV Value (0-31):</label>
-          <label></label>
-          <label>HP : {HP_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={HP_IV}
-            onChange={(e) => handleChange(e, "HP", "IV")}
-          />
-          <label>Attack : {Attack_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={Attack_IV}
-            onChange={(e) => handleChange(e, "Attack", "IV")}
-          />
-          <label>Defense : {Defense_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={Defense_IV}
-            onChange={(e) => handleChange(e, "Defense", "IV")}
-          />
-          <label>Sp. Atk : {SpAtk_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={SpAtk_IV}
-            onChange={(e) => handleChange(e, "Sp. Atk", "IV")}
-          />
-          <label>Sp. Def : {SpDef_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={SpDef_IV}
-            onChange={(e) => handleChange(e, "Sp. Def", "IV")}
-          />
-          <label>Speed : {Speed_IV}</label>
-          <input
-            type="range"
-            min={0}
-            max={31}
-            value={Speed_IV}
-            onChange={(e) => handleChange(e, "Speed", "IV")}
-          />
-        </div>
-        {/* EVs */}
-        <div className="grid grid-cols-2 gap-2">
-          <label>EV Value (0-252):</label>
-          <label></label>
-          <label>HP : {HP_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={HP_EV}
-            onChange={(e) => handleChange(e, "HP", "EV")}
-          />
-          <label>Attack : {Attack_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={Attack_EV}
-            onChange={(e) => handleChange(e, "Attack", "EV")}
-          />
-          <label>Defense : {Defense_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={Defense_EV}
-            onChange={(e) => handleChange(e, "Defense", "EV")}
-          />
-          <label>Sp. Atk : {SpAtk_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={SpAtk_EV}
-            onChange={(e) => handleChange(e, "Sp. Atk", "EV")}
-          />
-          <label>Sp. Def : {SpDef_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={SpDef_EV}
-            onChange={(e) => handleChange(e, "Sp. Def", "EV")}
-          />
-          <label>Speed : {Speed_EV}</label>
-          <input
-            type="range"
-            min={0}
-            max={252}
-            value={Speed_EV}
-            onChange={(e) => handleChange(e, "Speed", "EV")}
-          />
-        </div>
+      {/* IVs */}
+      <div className="grid grid-cols-2 gap-2">
+        <label>IV/EV Value (0-31):</label>
+        <label></label>
+        <label>HP : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs.HP}
+          onChange={(e) => handleChange(e, "HP", "IV")}
+          onBlur={() => handleBlur("HP", "IV")}
+        />
+        <label>Attack : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs.Attack}
+          onChange={(e) => handleChange(e, "Attack", "IV")}
+          onBlur={() => handleBlur("Attack", "IV")}
+        />
+        <label>Defense : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs.Defense}
+          onChange={(e) => handleChange(e, "Defense", "IV")}
+          onBlur={() => handleBlur("Defense", "IV")}
+        />
+        <label>Sp. Atk : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs["Sp. Atk"]}
+          onChange={(e) => handleChange(e, "Sp. Atk", "IV")}
+          onBlur={() => handleBlur("Sp. Atk", "IV")}
+        />
+        <label>Sp. Def : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs["Sp. Def"]}
+          onChange={(e) => handleChange(e, "Sp. Def", "IV")}
+          onBlur={() => handleBlur("Sp. Def", "IV")}
+        />
+        <label>Speed : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={31}
+          value={IVs.Speed}
+          onChange={(e) => handleChange(e, "Speed", "IV")}
+          onBlur={() => handleBlur("Speed", "IV")}
+        />
+      </div>
+      {/* EVs */}
+      <div className="grid grid-cols-2 gap-2">
+        <label>EV Value (0-252):</label>
+        <label></label>
+        <label>HP : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs.HP}
+          onChange={(e) => handleChange(e, "HP", "EV")}
+          onBlur={() => handleBlur("HP", "EV")}
+        />
+        <label>Attack : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs.Attack}
+          onChange={(e) => handleChange(e, "Attack", "EV")}
+          onBlur={() => handleBlur("Attack", "EV")}
+        />
+        <label>Defense : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs.Defense}
+          onChange={(e) => handleChange(e, "Defense", "EV")}
+          onBlur={() => handleBlur("Defense", "EV")}
+        />
+        <label>Sp. Atk : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs["Sp. Atk"]}
+          onChange={(e) => handleChange(e, "Sp. Atk", "EV")}
+          onBlur={() => handleBlur("Sp. Atk", "EV")}
+        />
+        <label>Sp. Def : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs["Sp. Def"]}
+          onChange={(e) => handleChange(e, "Sp. Def", "EV")}
+          onBlur={() => handleBlur("Sp. Def", "EV")}
+        />
+        <label>Speed : </label>
+        <input
+          className={inputClassName}
+          type="number"
+          min={0}
+          max={252}
+          value={EVs.Speed}
+          onChange={(e) => handleChange(e, "Speed", "EV")}
+          onBlur={() => handleBlur("Speed", "EV")}
+        />
+      </div>
     </div>
   );
 };

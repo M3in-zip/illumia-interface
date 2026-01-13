@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { PokemonSearchInput } from "../pokemon-search-input";
 import { useEffect, useState } from "react";
-import { SpriteStats } from "../sprite-stats";
-import { IV_EV, type Stat, type StatValue } from "@components/iv-ev";
+import { PokemonInfo } from "../pokemon-info";
+import { PokemonStats, type Stat, type StatValue } from "@/components/pokemon-stats";
 
 interface PokemonBuildProps {
   title?: string;
@@ -41,9 +41,9 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
         onClick={setSelectedPokemon}
       />
       {data && (
-        <SpriteStats sprite={data.sprites.front_default} stats={data.stats} />
+        <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
-      {data && <IV_EV changeIVs={setIVs} changeEVs={setEVs} IVs={IVs} EVs={EVs} />}
+      {data && <PokemonStats changeIVs={setIVs} changeEVs={setEVs} IVs={IVs} EVs={EVs} />}
     </div>
   );
 };

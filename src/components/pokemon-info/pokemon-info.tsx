@@ -12,7 +12,7 @@ interface SpriteStatsProps {
   stats: stat[];
 }
 
-export const SpriteStats = ({ sprite, stats }: SpriteStatsProps) => {
+export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
   const statNameMap: Record<string, string> = {
     hp: "HP",
     attack: "Attack",

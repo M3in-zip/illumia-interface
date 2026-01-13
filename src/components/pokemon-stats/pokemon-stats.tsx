@@ -67,7 +67,7 @@ export const PokemonStats = ({
     }
   };
 
-  const inputClassName = "border-2 w-[clamp(3rem,6vw,8rem)] rounded-md";
+  const inputClassName = "border-2 border-white w-[clamp(3rem,6vw,8rem)] rounded-md";
   const customInput = (
     min: number,
     max: number,
@@ -90,7 +90,7 @@ export const PokemonStats = ({
     <div>
       <div>
         <Select onValueChange={onNatureChange}>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px] border-white border-2">
             <SelectValue placeholder="Nature" />
           </SelectTrigger>
           <SelectContent>

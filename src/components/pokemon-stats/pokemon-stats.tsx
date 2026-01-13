@@ -1,6 +1,15 @@
-import { useState } from "react";
+import { usePokemonStore } from "@/stores/pokemonStore";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export type Stat = "HP" | "Attack" | "Defense" | "Sp. Atk" | "Sp. Def" | "Speed";
+export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
 export type StatValue = number | "";
 
 interface IVEVProps {
@@ -8,10 +17,20 @@ interface IVEVProps {
   changeEVs: (evs: Record<Stat, StatValue>) => void;
   IVs: Record<Stat, StatValue>;
   EVs: Record<Stat, StatValue>;
+  onNatureChange: (nature: string) => void;
   onBlur?: () => void;
 }
 
-export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
+export const PokemonStats = ({
+  changeIVs,
+  changeEVs,
+  IVs,
+  EVs,
+  onNatureChange,
+}: IVEVProps) => {
+  const nonNeutralNatures = usePokemonStore((state) =>
+    state.getNonNeutralNatures()
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -20,7 +39,7 @@ export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
   ) => {
     var nextValue = e.target.value ? parseInt(e.target.value) : "";
     const numericValue = typeof nextValue === "number" ? nextValue : 0;
-    
+
     if (type === "IV") {
       if (numericValue > 31) nextValue = 31;
       changeIVs({ ...IVs, [stat]: nextValue });
@@ -49,7 +68,13 @@ export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
   };
 
   const inputClassName = "border-2 w-[clamp(3rem,6vw,8rem)] rounded-md";
-  const customInput = (min: number, max: number, value: StatValue, stat: Stat, type: "IV" | "EV") => (
+  const customInput = (
+    min: number,
+    max: number,
+    value: StatValue,
+    stat: Stat,
+    type: "IV" | "EV"
+  ) => (
     <input
       className={inputClassName}
       type="number"
@@ -62,6 +87,31 @@ export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
   );
 
   return (
+    <div>
+      <div>
+        <Select onValueChange={onNatureChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Nature" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Natures</SelectLabel>
+              <SelectItem value="--">--</SelectItem>
+              {nonNeutralNatures.map((n) => (
+                <SelectItem key={n.name} value={n.name}>
+                  <label className="font-semibold">{n.name}</label>{" "}
+                  <label className="text-[#A9FF1F] font-semibold">
+                    {n.increasedStat}
+                  </label>{" "}
+                  <label className="text-[#F91A34] font-semibold">
+                    {n.decreasedStat}
+                  </label>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
       <div className="grid grid-cols-[auto_auto_auto] gap-2">
         <label className="font-semibold">STAT</label>
         <label className="font-semibold">IV (0-31)</label>
@@ -70,11 +120,11 @@ export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
         {customInput(0, 31, IVs.HP, "HP", "IV")}
         {customInput(0, 252, EVs.HP, "HP", "EV")}
         <label>Attack : </label>
-        {customInput(0, 31, IVs.Attack, "Attack", "IV")}
-        {customInput(0, 252, EVs.Attack, "Attack", "EV")}
+        {customInput(0, 31, IVs.Atk, "Atk", "IV")}
+        {customInput(0, 252, EVs.Atk, "Atk", "EV")}
         <label>Defense : </label>
-        {customInput(0, 31, IVs.Defense, "Defense", "IV")}
-        {customInput(0, 252, EVs.Defense, "Defense", "EV")}
+        {customInput(0, 31, IVs.Def, "Def", "IV")}
+        {customInput(0, 252, EVs.Def, "Def", "EV")}
         <label>Sp. Atk : </label>
         {customInput(0, 31, IVs["Sp. Atk"], "Sp. Atk", "IV")}
         {customInput(0, 252, EVs["Sp. Atk"], "Sp. Atk", "EV")}
@@ -85,5 +135,6 @@ export const PokemonStats = ({ changeIVs, changeEVs, IVs, EVs }: IVEVProps) => {
         {customInput(0, 31, IVs.Speed, "Speed", "IV")}
         {customInput(0, 252, EVs.Speed, "Speed", "EV")}
       </div>
+    </div>
   );
 };

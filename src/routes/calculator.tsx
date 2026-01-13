@@ -13,7 +13,7 @@ export const Route = createFileRoute("/calculator")({
 function PokemonCalculator() {
   const setPokemonList = usePokemonStore((state) => state.setPokemonList);
 
-  const { data, isLoading, error } = useQuery({
+  const { data:pokemonList, isLoading:loadingPokemonList, error:errorPokemonList } = useQuery({
     queryKey: ["pokemonList"],
     queryFn: () => getPokemonBaseList(),
     select: (data) =>
@@ -27,15 +27,15 @@ function PokemonCalculator() {
   });
 
   useEffect(() => {
-    if (data) setPokemonList(data);
-    if (data) console.log(usePokemonStore.getState().pokemonList);
-  }, [data]);
+    if (pokemonList) setPokemonList(pokemonList);
+    if (pokemonList) console.log(usePokemonStore.getState().pokemonList);
+  }, [pokemonList, setPokemonList]);
 
-  if (error) return <div className="p-2">Errore nel caricamento</div>;
+  if (errorPokemonList) return <div className="p-2">Errore nel caricamento</div>;
 
   return (
-    <div className="p-2">
-      {isLoading && <FullPageSpinner />}
+    <div className="p-2 w-full">
+      {loadingPokemonList && <FullPageSpinner />}
       <div className="w-[clamp(22rem,50vw,40rem)]">
         <PokemonBuild title="Attacker"/>
       </div>

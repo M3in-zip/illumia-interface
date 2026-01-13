@@ -14,7 +14,7 @@ const RootLayout = () => {
       <div className="flex flex-col flex-1 w-full min-h-screen">
         <MainMenu />
         <hr />
-        <main className="flex-1 bg-[url('/images/main-menu-bg.png')] bg-cover bg-center">
+        <main className="flex-1 bg-[#aba59d]">
           <Outlet />
         </main>
         <TanStackRouterDevtools />

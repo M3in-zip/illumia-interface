@@ -11,8 +11,9 @@ interface PokemonBuildProps {
 export const PokemonBuild = ({ title }: PokemonBuildProps) => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
-  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Attack: 31, Defense: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
-  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Attack: 0, Defense: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
+  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Atk: 31, Def: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
+  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Atk: 0, Def: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
+  const [selectedNature, setSelectedNature] = useState<string>("--");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],
@@ -43,7 +44,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
       {data && (
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
-      {data && <PokemonStats changeIVs={setIVs} changeEVs={setEVs} IVs={IVs} EVs={EVs} />}
+      {data && <PokemonStats changeIVs={setIVs} changeEVs={setEVs} IVs={IVs} EVs={EVs} onNatureChange={setSelectedNature} />}
     </div>
   );
 };

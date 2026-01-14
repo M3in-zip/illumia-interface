@@ -22,6 +22,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
   const [selectedNature, setSelectedNature] = useState<string>("--");
   const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Atk: 31, Def: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
   const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Atk: 0, Def: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
+  const [level, setLevel] = useState<string>("50");
   
   const nonNeutralNatures = usePokemonStore((state) =>
     state.getNonNeutralNatures()
@@ -62,7 +63,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
     }
   };
 
-  const inputClassName = "border-2 border-white w-[clamp(3rem,6vw,8rem)] rounded-md";
+  const inputClassName = "border-2 border-white rounded-md";
   const customInput = (
     min: number,
     max: number,
@@ -82,10 +83,11 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
   );
 
   return (
-    <div>
-      <div>
-        <Select onValueChange={setSelectedNature} value={selectedNature}>
-          <SelectTrigger className="w-[180px] border-white border-2">
+    <div className="p-2">
+      <div className="flex flex-row items-center gap-2 mb-2">
+        <label className="font-semibold">NATURE : </label>
+        {/* <Select onValueChange={setSelectedNature} value={selectedNature}>
+          <SelectTrigger className="border-white border-2">
             <SelectValue placeholder="Nature" />
           </SelectTrigger>
           <SelectContent>
@@ -106,8 +108,21 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
             </SelectGroup>
           </SelectContent>
         </Select>
+        <label className="font-semibold">LEVEL : </label>
+        <Select onValueChange={setLevel} value={level}>
+          <SelectTrigger className="border-white border-2">
+            <SelectValue placeholder="Level" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Levels</SelectLabel>
+              <SelectItem className="font-semibold" value="50"><label className="font-semibold">50</label></SelectItem>
+              <SelectItem className="font-semibold" value="100"><label className="font-semibold">100</label></SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select> */}
       </div>
-      <div className="grid grid-cols-[auto_auto_auto] gap-2">
+      <div className="grid grid-cols-3 gap-2">
         <label className="font-semibold">STAT</label>
         <label className="font-semibold">IV (0-31)</label>
         <label className="font-semibold">EV (0-252)</label>

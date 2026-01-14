@@ -8,10 +8,8 @@ const RootLayout = () => {
   const visible = useSidebarStore((state) => state.visible);
 
   return (
-    <div className="flex min-h-screen">
-      {/* SIDEBAR */}
-      <SidebarMenu visible={visible} />
-      <div className="flex flex-col flex-1 w-full min-h-screen">
+    <div>
+      <div className="flex flex-col flex-1 w-full min-w-[360px]">
         <MainMenu />
         <hr />
         <main className="flex-1 bg-[#aba59d]">

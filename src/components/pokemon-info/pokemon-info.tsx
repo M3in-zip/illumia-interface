@@ -48,15 +48,12 @@ export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
               key={stat.stat.name}
               className="flex items-center gap-2 w-full"
             >
-              {/* Colonna 1: nome */}
               <div className="w-[30%] text-right breaking-words">
                 {statNameMap[stat.stat.name] || stat.stat.name}:
               </div>
 
-              {/* Colonna 2: valore */}
               <div className="w-[10%] text-left">{stat.base_stat}</div>
 
-              {/* Colonna 3: barra */}
               <div className="w-[60%] rounded h-[clamp(0.2rem,0.5vw,4rem)]">
                 <div
                   className={`${barColor} h-full rounded`}

@@ -11,10 +11,10 @@ export const SidebarMenu = ({ visible }: SidebarProps) => {
         bg-neutral-900 text-white
         transition-width duration-300 ease-in-out
         overflow-hidden
-        ${visible ? "w-[250px]" : "w-0"}
+        ${visible ? "w-[30%]" : "w-0"}
       `}
     >
-      <div className="w-[250px] p-4">
+      <div className="w-[30%] p-4">
         Sidebar
       </div>
     </div>

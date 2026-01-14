@@ -29,7 +29,7 @@ export const PokemonSearchInput = ({
 };
 
   return (
-    <div className="relative w-48 max-w-sm">
+    <div className="relative w-full">
       {/* Input di ricerca */}
       <div className="relative flex items-center">
         <i className="fa-solid fa-search absolute left-3 text-slate-400"></i>{" "}

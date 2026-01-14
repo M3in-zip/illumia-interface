@@ -36,9 +36,7 @@ function PokemonCalculator() {
   return (
     <div className="p-2 w-full">
       {loadingPokemonList && <FullPageSpinner />}
-      <div className="w-[clamp(22rem,50vw,40rem)]">
-        <PokemonBuild title="Attacker"/>
-      </div>
+      <PokemonBuild title="Attacker"/>
     </div>
   );
 }

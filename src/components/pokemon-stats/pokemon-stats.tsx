@@ -8,26 +8,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
 export type StatValue = number | "";
 
 interface IVEVProps {
-  changeIVs: (ivs: Record<Stat, StatValue>) => void;
-  changeEVs: (evs: Record<Stat, StatValue>) => void;
-  IVs: Record<Stat, StatValue>;
-  EVs: Record<Stat, StatValue>;
-  onNatureChange: (nature: string) => void;
+  baseStats: number[];
   onBlur?: () => void;
 }
 
-export const PokemonStats = ({
-  changeIVs,
-  changeEVs,
-  IVs,
-  EVs,
-  onNatureChange,
-}: IVEVProps) => {
+export const PokemonStats = ({ baseStats }: IVEVProps) => {
+  const [selectedNature, setSelectedNature] = useState<string>("--");
+  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Atk: 31, Def: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
+  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Atk: 0, Def: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
+  
   const nonNeutralNatures = usePokemonStore((state) =>
     state.getNonNeutralNatures()
   );
@@ -42,7 +37,7 @@ export const PokemonStats = ({
 
     if (type === "IV") {
       if (numericValue > 31) nextValue = 31;
-      changeIVs({ ...IVs, [stat]: nextValue });
+      setIVs({ ...IVs, [stat]: nextValue });
     } else {
       if (numericValue > 252) return;
       const totalEVWithoutCurrent = Object.entries(EVs).reduce(
@@ -51,18 +46,18 @@ export const PokemonStats = ({
         0
       );
       const newTotalEV = totalEVWithoutCurrent + numericValue;
-      if (newTotalEV < 509) changeEVs({ ...EVs, [stat]: nextValue });
+      if (newTotalEV < 509) setEVs({ ...EVs, [stat]: nextValue });
     }
   };
 
   const handleBlur = (stat: Stat, type: "IV" | "EV") => {
     if (type === "IV") {
       if (IVs[stat] === "") {
-        changeIVs({ ...IVs, [stat]: 0 });
+        setIVs({ ...IVs, [stat]: 0 });
       }
     } else {
       if (EVs[stat] === "") {
-        changeEVs({ ...EVs, [stat]: 0 });
+        setEVs({ ...EVs, [stat]: 0 });
       }
     }
   };
@@ -89,7 +84,7 @@ export const PokemonStats = ({
   return (
     <div>
       <div>
-        <Select onValueChange={onNatureChange}>
+        <Select onValueChange={setSelectedNature} value={selectedNature}>
           <SelectTrigger className="w-[180px] border-white border-2">
             <SelectValue placeholder="Nature" />
           </SelectTrigger>
@@ -100,7 +95,7 @@ export const PokemonStats = ({
               {nonNeutralNatures.map((n) => (
                 <SelectItem key={n.name} value={n.name}>
                   <label className="font-semibold">{n.name}</label>{" "}
-                  <label className="text-[#A9FF1F] font-semibold">
+                  <label className="text-[#4AF594] font-semibold">
                     {n.increasedStat}
                   </label>{" "}
                   <label className="text-[#F91A34] font-semibold">

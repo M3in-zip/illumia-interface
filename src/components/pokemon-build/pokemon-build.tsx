@@ -3,6 +3,7 @@ import { PokemonSearchInput } from "../pokemon-search-input";
 import { useEffect, useState } from "react";
 import { PokemonInfo } from "../pokemon-info";
 import { PokemonStats, type Stat, type StatValue } from "@/components/pokemon-stats";
+import { FullPageSpinner } from "../full-page-spinner";
 
 interface PokemonBuildProps {
   title?: string;
@@ -10,10 +11,7 @@ interface PokemonBuildProps {
 
 export const PokemonBuild = ({ title }: PokemonBuildProps) => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("rayquaza");
-  const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
-  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Atk: 31, Def: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
-  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Atk: 0, Def: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
-  const [selectedNature, setSelectedNature] = useState<string>("--");
+  const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);  
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],
@@ -30,10 +28,6 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
     }
   }, [data]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading pokemon data</div>;
-  
-
   return (
     <div className="w-full">
       {title && <h2 className="text-2xl mb-4">{title}</h2>}
@@ -44,7 +38,8 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
       {data && (
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
-      {data && <PokemonStats changeIVs={setIVs} changeEVs={setEVs} IVs={IVs} EVs={EVs} onNatureChange={setSelectedNature} />}
+      {data && <PokemonStats baseStats={baseStats}/>}
+      {isLoading && <FullPageSpinner />}
     </div>
   );
 };

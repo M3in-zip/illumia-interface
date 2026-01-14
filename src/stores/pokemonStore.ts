@@ -5,7 +5,7 @@ interface PokemonBase {
   name: string;
 }
 
-interface pokemonNature {
+export interface pokemonNature {
   name: string;
   increasedStat?: string;
   decreasedStat?: string;

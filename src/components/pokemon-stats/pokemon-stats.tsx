@@ -1,6 +1,7 @@
 import { usePokemonStore } from "@/stores/pokemonStore";
 import { useState } from "react";
 import { DropDown } from "../drop-down";
+import type { pokemonNature } from "@/stores/pokemonStore";
 
 export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
 export type StatValue = number | "";
@@ -30,9 +31,82 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
   });
   const [level, setLevel] = useState<string>("50");
 
-  const nonNeutralNatures = usePokemonStore((state) =>
+  const nonNeutralNatures: pokemonNature[] = usePokemonStore((state) =>
     state.getNonNeutralNatures()
   );
+  const baseStatsObj : Record<Stat,number> = {
+    HP: baseStats[0],
+    Atk: baseStats[1],
+    Def: baseStats[2],
+    "Sp. Atk": baseStats[3],
+    "Sp. Def": baseStats[4],
+    Speed: baseStats[5],
+  };
+  const selectedNatureObj: pokemonNature|undefined = nonNeutralNatures.find(
+    (nature) => nature.name === selectedNature
+  );
+
+  const finalStats: Record<Stat,number> = {
+    HP: Math.floor(
+      ((2 * baseStatsObj["HP"] +
+        (IVs["HP"] ? (IVs["HP"] as number) : 0) +
+        (EVs["HP"] ? (EVs["HP"] as number) : 0)) *
+        parseInt(level)) /
+        100 +
+        parseInt(level)+
+        10
+    ),
+    Atk: Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj["Atk"] +
+          (IVs["Atk"] ? (IVs["Atk"] as number) : 0) +
+          (EVs["Atk"] ? (EVs["Atk"] as number) : 0)) *
+          parseInt(level)) /
+          100 +
+          5
+      )*(selectedNatureObj?.increasedStat=="Atk"? 1.1 : selectedNatureObj?.decreasedStat=="Atk"? 0.9 : 1)
+    ),
+    Def: Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj["Def"] +
+          (IVs["Def"] ? (IVs["Def"] as number) : 0) +
+          (EVs["Def"] ? (EVs["Def"] as number) : 0)) *
+          parseInt(level)) /
+          100 +
+          5
+      )*(selectedNatureObj?.increasedStat=="Def"? 1.1 : selectedNatureObj?.decreasedStat=="Def"? 0.9 : 1)
+    ),
+    "Sp. Atk": Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj["Sp. Atk"] +
+          (IVs["Sp. Atk"] ? (IVs["Sp. Atk"] as number) : 0) +
+          (EVs["Sp. Atk"] ? (EVs["Sp. Atk"] as number) : 0)) *
+          parseInt(level)) /
+          100 +
+          5
+      )*(selectedNatureObj?.increasedStat=="Sp. Atk"? 1.1 : selectedNatureObj?.decreasedStat=="Sp. Atk"? 0.9 : 1)
+    ),
+    "Sp. Def": Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj["Sp. Def"] +
+          (IVs["Sp. Def"] ? (IVs["Sp. Def"] as number) : 0) +
+          (EVs["Sp. Def"] ? (EVs["Sp. Def"] as number) : 0)) *
+          parseInt(level)) /
+          100 +
+          5
+      )*(selectedNatureObj?.increasedStat=="Sp. Def"? 1.1 : selectedNatureObj?.decreasedStat=="Sp. Def"? 0.9 : 1)
+    ),
+    Speed: Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj["Speed"] +
+          (IVs["Speed"] ? (IVs["Speed"] as number) : 0) +
+          (EVs["Speed"] ? (EVs["Speed"] as number) : 0)) *
+          parseInt(level)) /
+          100 +
+          5
+      )*(selectedNatureObj?.increasedStat=="Speed"? 1.1 : selectedNatureObj?.decreasedStat=="Speed"? 0.9 : 1)
+    )
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -117,26 +191,33 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
           dataSource={["50", "100"]}
         />
       </div>
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         <label className="font-semibold">STAT</label>
+        <label></label>
         <label className="font-semibold">IV (0-31)</label>
         <label className="font-semibold">EV (0-252)</label>
         <label>HP : </label>
+        <label>{finalStats["HP"]}</label>
         {customInput(0, 31, IVs.HP, "HP", "IV")}
         {customInput(0, 252, EVs.HP, "HP", "EV")}
         <label>Attack : </label>
+        <label>{finalStats["Atk"]}</label>
         {customInput(0, 31, IVs.Atk, "Atk", "IV")}
         {customInput(0, 252, EVs.Atk, "Atk", "EV")}
         <label>Defense : </label>
+        <label>{finalStats["Def"]}</label>
         {customInput(0, 31, IVs.Def, "Def", "IV")}
         {customInput(0, 252, EVs.Def, "Def", "EV")}
         <label>Sp. Atk : </label>
+        <label>{finalStats["Sp. Atk"]}</label>
         {customInput(0, 31, IVs["Sp. Atk"], "Sp. Atk", "IV")}
         {customInput(0, 252, EVs["Sp. Atk"], "Sp. Atk", "EV")}
         <label>Sp. Def : </label>
+        <label>{finalStats["Sp. Def"]}</label>
         {customInput(0, 31, IVs["Sp. Def"], "Sp. Def", "IV")}
         {customInput(0, 252, EVs["Sp. Def"], "Sp. Def", "EV")}
         <label>Speed : </label>
+        <label>{finalStats["Speed"]}</label>
         {customInput(0, 31, IVs.Speed, "Speed", "IV")}
         {customInput(0, 252, EVs.Speed, "Speed", "EV")}
       </div>

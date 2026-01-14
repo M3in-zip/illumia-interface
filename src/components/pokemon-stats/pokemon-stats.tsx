@@ -1,14 +1,6 @@
 import { usePokemonStore } from "@/stores/pokemonStore";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useState } from "react";
+import { DropDown } from "../drop-down";
 
 export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
 export type StatValue = number | "";
@@ -20,10 +12,24 @@ interface IVEVProps {
 
 export const PokemonStats = ({ baseStats }: IVEVProps) => {
   const [selectedNature, setSelectedNature] = useState<string>("--");
-  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({ HP: 31, Atk: 31, Def: 31, "Sp. Atk": 31, "Sp. Def": 31, Speed: 31 });
-  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({ HP: 0, Atk: 0, Def: 0, "Sp. Atk": 0, "Sp. Def": 0, Speed: 0 });
+  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({
+    HP: 31,
+    Atk: 31,
+    Def: 31,
+    "Sp. Atk": 31,
+    "Sp. Def": 31,
+    Speed: 31,
+  });
+  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({
+    HP: 0,
+    Atk: 0,
+    Def: 0,
+    "Sp. Atk": 0,
+    "Sp. Def": 0,
+    Speed: 0,
+  });
   const [level, setLevel] = useState<string>("50");
-  
+
   const nonNeutralNatures = usePokemonStore((state) =>
     state.getNonNeutralNatures()
   );
@@ -86,41 +92,30 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
     <div className="p-2">
       <div className="flex flex-row items-center gap-2 mb-2">
         <label className="font-semibold">NATURE : </label>
-        {/* <Select onValueChange={setSelectedNature} value={selectedNature}>
-          <SelectTrigger className="border-white border-2">
-            <SelectValue placeholder="Nature" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Natures</SelectLabel>
-              <SelectItem value="--">--</SelectItem>
-              {nonNeutralNatures.map((n) => (
-                <SelectItem key={n.name} value={n.name}>
-                  <label className="font-semibold">{n.name}</label>{" "}
-                  <label className="text-[#4AF594] font-semibold">
-                    {n.increasedStat}
-                  </label>{" "}
-                  <label className="text-[#F91A34] font-semibold">
-                    {n.decreasedStat}
-                  </label>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <DropDown
+          onSelect={setSelectedNature}
+          value={selectedNature}
+          dataSource={["--", ...nonNeutralNatures.map((n) => n.name)]}
+          extraContent={[
+            <></>,
+            ...nonNeutralNatures.map((n) => (
+              <span className="flex flex-row gap-2 p-2">
+                <span className="text-[#4AF594] font-semibold">
+                  {n.increasedStat}
+                </span>
+                <span className="text-[#F91A34] font-semibold">
+                  {n.decreasedStat}
+                </span>
+              </span>
+            )),
+          ]}
+        />
         <label className="font-semibold">LEVEL : </label>
-        <Select onValueChange={setLevel} value={level}>
-          <SelectTrigger className="border-white border-2">
-            <SelectValue placeholder="Level" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Levels</SelectLabel>
-              <SelectItem className="font-semibold" value="50"><label className="font-semibold">50</label></SelectItem>
-              <SelectItem className="font-semibold" value="100"><label className="font-semibold">100</label></SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select> */}
+        <DropDown
+          onSelect={setLevel}
+          value={level}
+          dataSource={["50", "100"]}
+        />
       </div>
       <div className="grid grid-cols-3 gap-2">
         <label className="font-semibold">STAT</label>

@@ -24,6 +24,7 @@ export const DropDown = ({ onSelect, value, dataSource }: DropDownProps) => {
         {/* gray icon lens */}
         <input
           type="text"
+          readOnly
           value={value??"--"}
           placeholder="Search Pokémon..."
           className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white"
@@ -60,7 +61,7 @@ export const DropDown = ({ onSelect, value, dataSource }: DropDownProps) => {
       {isFocused && (
         <ul
           className="absolute left-1/2 top-full transform -translate-x-1/2 -translate-y-1/2 bg-white border border-slate-200 rounded-lg shadow-xl
-             max-h-44 overflow-auto whitespace-nowrap z-10 w-auto"
+             max-h-[50vh] overflow-auto whitespace-nowrap z-10 w-auto"
         >
           {dataSource.length > 0 ? (
             dataSource.map((item, index) => (

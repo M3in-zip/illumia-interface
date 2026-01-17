@@ -36,7 +36,11 @@
       "@stores/*": [
         "./src/stores/*"
       ]
-    }
+    },
+
+    /* IMPORT JSON */
+    "esModuleInterop": true,  /* to treatv commonJS as ES module (import ... from ...) */
+    "resolveJsonModule": true /* to import json per typescript */
   },
   "include": ["src"]
 }

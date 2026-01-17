@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PokemonInfo } from "../pokemon-info";
 import { PokemonStats, type Stat, type StatValue } from "@/components/pokemon-stats";
 import { FullPageSpinner } from "../full-page-spinner";
+import { MoveCard } from "../move-card";
 
 interface PokemonBuildProps {
   title?: string;
@@ -43,6 +44,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
       {data && <PokemonStats baseStats={baseStats}/>}
+      {data && <MoveCard move="coaching"></MoveCard>}
       {isLoading && <FullPageSpinner />}
     </div>
   );

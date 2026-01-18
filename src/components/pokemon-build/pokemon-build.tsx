@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { PokemonSearchInput } from "../pokemon-search-input";
 import { useEffect, useState } from "react";
 import { PokemonInfo } from "../pokemon-info";
-import { PokemonStats, type Stat, type StatValue } from "@/components/pokemon-stats";
+import { PokemonStats } from "@/components/pokemon-stats";
 import { FullPageSpinner } from "../full-page-spinner";
-import { MoveCard } from "../move-card";
+import { MoveList } from "../move-list";
 
 interface PokemonBuildProps {
   title?: string;
@@ -13,7 +13,8 @@ interface PokemonBuildProps {
 export const PokemonBuild = ({ title }: PokemonBuildProps) => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
-  const [moves, setMoves] = useState<number[]>([])
+  const [moves, setMoves] = useState<string[]>([])
+  const [selectedMove, setSelectedMove] = useState<string>("");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],
@@ -34,7 +35,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
   }, [data]);
 
   return (
-    <div className="w-full">
+    <div className="xl:w-[30%]">
       {title && <h2 className="text-2xl mb-4">{title}</h2>}
       <PokemonSearchInput
         defaultValue={selectedPokemon}
@@ -44,7 +45,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
       {data && <PokemonStats baseStats={baseStats}/>}
-      {data && <MoveCard move="coaching"></MoveCard>}
+      {data && moves.length > 0 && <MoveList moves={moves}></MoveList>}
       {isLoading && <FullPageSpinner />}
     </div>
   );

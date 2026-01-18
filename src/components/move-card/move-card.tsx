@@ -15,14 +15,18 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
   }, [selectedMove]);
 
   return (
-    <div className={`border-primary rounded-xl p-2 flex flex-row items-center gap-4 ${
-              selectedMove?.type.toLowerCase()}-card cursor-pointer`} 
+    <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 ${
+              selectedMove?.type.toLowerCase()}-card cursor-pointer justify-between`}
               onClick={onClick}>
-      <div className="flex flex-col md:flex-row">
-        <div className="flex flex-row items-center gap-2">
+
+      {/* first block */}
+      <div className="flex flex-col justify-between flex-1">
+
+        {/* name + type */}
+        <div className="flex flex-row items-center gap-2 justify-between">
           <span className="font-semibold text-2xl">
             {selectedMove?.name
-              ? selectedMove.name.toUpperCase()
+              ? selectedMove.name
               : "name not found"}
           </span>
           <div
@@ -32,6 +36,8 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
             {selectedMove?.type.toUpperCase() || "???"}
           </div>
         </div>
+
+        {/* power, accuracy, pp */}
         <div className="flex flex-row p-2 gap-2 font-semibold justify-between">
             <div className="flex flex-col items-center">
               <p>Power</p>
@@ -47,7 +53,11 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
             </div>
         </div>
       </div>
+
+      {/* description */}
+      <div className="flex w-[50%]">
       <p>{selectedMove?.description}</p>
+      </div>
     </div>
   );
 };

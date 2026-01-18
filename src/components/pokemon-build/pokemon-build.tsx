@@ -16,6 +16,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
   const [moves, setMoves] = useState<string[]>([])
   const [selectedMove, setSelectedMove] = useState<string>("");
+  console.log("selected move: ", selectedMove);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],
@@ -46,7 +47,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
       {data && <PokemonStats baseStats={baseStats}/>}
-      {data && moves.length > 0 && <PokemonMoveSearch moves={moves}></PokemonMoveSearch>}
+      {data && moves.length > 0 && <PokemonMoveSearch moves={moves} onClick={setSelectedMove}></PokemonMoveSearch>}
       {isLoading && <FullPageSpinner />}
     </div>
   );

@@ -36,7 +36,7 @@ export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
       <img
         src={sprite}
         alt="Pokemon sprite"
-        className="w-[30%] pixel-art"
+        className="w-[25%] pixel-art"
       />
       <div className="flex flex-col w-[60%] gap-2">
         {stats.map((stat) => {

@@ -5,19 +5,16 @@ export interface move {}
 
 interface MoveCardProps {
   move: string;
-  onClick?: () => void;
+  onClick?: (move: string) => void;
 }
 
 export const MoveCard = ({ move, onClick }: MoveCardProps) => {
   const selectedMove = moves.find((current) => current.name === move);
-  useEffect(() => {
-    console.log("mossa: ", selectedMove);
-  }, [selectedMove]);
 
   return (
     <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 ${
               selectedMove?.type.toLowerCase()}-card cursor-pointer justify-between`}
-              onClick={onClick}>
+              onMouseDown={onClick ? () => onClick(move) : undefined}>
 
       {/* first block */}
       <div className="flex flex-col justify-between flex-1">

@@ -190,7 +190,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
   return (
     <div className="p-2">
       <div className="flex flex-row items-center gap-2 mb-2">
-        <label className="font-semibold">NATURE : </label>
+        <span className="font-semibold whitespace-nowrap">NATURE : </span>
         <DropDown
           onSelect={setSelectedNature}
           value={selectedNature}
@@ -212,7 +212,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
             })),
           ]}
         />
-        <label className="font-semibold">LEVEL : </label>
+        <span className="font-semibold whitespace-nowrap">LEVEL : </span> 
         <DropDown
           onSelect={setLevel}
           value={level}

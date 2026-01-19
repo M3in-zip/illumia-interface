@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getPokemonBaseList } from "@/api/pokemon.ts";
 import { usePokemonStore } from "@/stores/pokemonStore";
 import { FullPageSpinner } from "@/components/full-page-spinner";
@@ -12,6 +12,12 @@ export const Route = createFileRoute("/calculator")({
 
 function PokemonCalculator() {
   const setPokemonList = usePokemonStore((state) => state.setPokemonList);
+  const [dataPokemon1, setDataPokemon1] = useState({stats: [1,1,1,1,1,1], move: ""});
+  const [dataPokemon2, setDataPokemon2] = useState({stats: [1,1,1,1,1,1], move: ""});
+
+  useEffect(() => {
+    console.log("Pokemon 1 data changed: ", dataPokemon1);
+  }, [dataPokemon1]);
 
   const { data:pokemonList, isLoading:loadingPokemonList, error:errorPokemonList } = useQuery({
     queryKey: ["pokemonList"],
@@ -34,9 +40,10 @@ function PokemonCalculator() {
   if (errorPokemonList) return <div className="p-2">Errore nel caricamento</div>;
 
   return (
-    <div className="p-2 w-full">
+    <div className="p-2 w-full flex flex-row gap-2 justify-between">
       {loadingPokemonList && <FullPageSpinner />}
-      <PokemonBuild title="Attacker"/>
+      <PokemonBuild setPokemonData={setDataPokemon1}/>
+      <PokemonBuild setPokemonData={setDataPokemon2}/>
     </div>
   );
 }

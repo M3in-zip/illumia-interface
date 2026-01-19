@@ -1,5 +1,4 @@
 import moves from "@/data/moves.json";
-import { useEffect } from "react";
 
 export interface move {}
 

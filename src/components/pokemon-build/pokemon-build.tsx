@@ -6,7 +6,11 @@ import { PokemonStats } from "@/components/pokemon-stats";
 import { FullPageSpinner } from "../full-page-spinner";
 import { PokemonMoveSearch } from "../pokemon-move-search";
 
-export const PokemonBuild = () => {
+interface PokemonBuildProps {
+  setPokemonData: (data: {stats: number[], move: string}) => void;
+}
+
+export const PokemonBuild = ({ setPokemonData }: PokemonBuildProps) => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
   const [moves, setMoves] = useState<string[]>([])
@@ -15,8 +19,8 @@ export const PokemonBuild = () => {
   const [selectedMove, setSelectedMove] = useState<string>("");
 
   useEffect(() => {
-    console.log("Current Stats: ", stats);
-  }, [stats]);
+    setPokemonData({stats:stats, move: selectedMove});
+  }, [stats, selectedMove]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],

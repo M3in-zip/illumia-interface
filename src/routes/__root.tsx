@@ -9,7 +9,7 @@ const RootLayout = () => {
 
   return (
     <div>
-      <div className="flex flex-col flex-1 w-full min-w-[360px]">
+      <div className="flex flex-col flex-1 w-full min-w-[360px] min-h-screen">
         <MainMenu />
         <hr />
         <main className="flex-1 bg-[#aba59d]">

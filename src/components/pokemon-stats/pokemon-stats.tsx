@@ -1,5 +1,5 @@
 import { usePokemonStore } from "@/stores/pokemonStore";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { DropDown } from "../drop-down";
 import type { pokemonNature } from "@/stores/pokemonStore";
 
@@ -8,10 +8,10 @@ export type StatValue = number | "";
 
 interface IVEVProps {
   baseStats: number[];
-  onBlur?: () => void;
+  onChange: (stats: number[]) => void;
 }
 
-export const PokemonStats = ({ baseStats }: IVEVProps) => {
+export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
   const [selectedNature, setSelectedNature] = useState<string>("--");
   const [IVs, setIVs] = useState<Record<Stat, StatValue>>({
     HP: 31,
@@ -32,7 +32,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
   const [level, setLevel] = useState<string>("50");
 
   const nonNeutralNatures: pokemonNature[] = usePokemonStore((state) =>
-    state.getNonNeutralNatures()
+    state.getNonNeutralNatures(),
   );
   const baseStatsObj: Record<Stat, number> = {
     HP: baseStats[0],
@@ -43,100 +43,113 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
     Speed: baseStats[5],
   };
   const selectedNatureObj: pokemonNature | undefined = nonNeutralNatures.find(
-    (nature) => nature.name === selectedNature
+    (nature) => nature.name === selectedNature,
   );
 
-  const finalStats: Record<Stat, number> = {
-    HP: Math.floor(
-      ((2 * baseStatsObj["HP"] +
-        (IVs["HP"] ? (IVs["HP"] as number) : 0) +
-        (EVs["HP"] ? (EVs["HP"] as number) : 0)) *
-        parseInt(level)) /
-        100 +
-        parseInt(level) +
-        10
-    ),
-    Atk: Math.floor(
-      Math.floor(
-        ((2 * baseStatsObj["Atk"] +
-          (IVs["Atk"] ? (IVs["Atk"] as number) : 0) +
-          (EVs["Atk"] ? (EVs["Atk"] as number) : 0)) *
+  const finalStats = useMemo<Record<Stat, number>>(() => {
+    return {
+      HP: Math.floor(
+        ((2 * baseStatsObj["HP"] +
+          (IVs["HP"] ? (IVs["HP"] as number) : 0) +
+          (EVs["HP"] ? (EVs["HP"] as number) : 0)) *
           parseInt(level)) /
           100 +
-          5
-      ) *
-        (selectedNatureObj?.increasedStat == "Atk"
-          ? 1.1
-          : selectedNatureObj?.decreasedStat == "Atk"
-            ? 0.9
-            : 1)
-    ),
-    Def: Math.floor(
-      Math.floor(
-        ((2 * baseStatsObj["Def"] +
-          (IVs["Def"] ? (IVs["Def"] as number) : 0) +
-          (EVs["Def"] ? (EVs["Def"] as number) : 0)) *
-          parseInt(level)) /
-          100 +
-          5
-      ) *
-        (selectedNatureObj?.increasedStat == "Def"
-          ? 1.1
-          : selectedNatureObj?.decreasedStat == "Def"
-            ? 0.9
-            : 1)
-    ),
-    "Sp. Atk": Math.floor(
-      Math.floor(
-        ((2 * baseStatsObj["Sp. Atk"] +
-          (IVs["Sp. Atk"] ? (IVs["Sp. Atk"] as number) : 0) +
-          (EVs["Sp. Atk"] ? (EVs["Sp. Atk"] as number) : 0)) *
-          parseInt(level)) /
-          100 +
-          5
-      ) *
-        (selectedNatureObj?.increasedStat == "Sp. Atk"
-          ? 1.1
-          : selectedNatureObj?.decreasedStat == "Sp. Atk"
-            ? 0.9
-            : 1)
-    ),
-    "Sp. Def": Math.floor(
-      Math.floor(
-        ((2 * baseStatsObj["Sp. Def"] +
-          (IVs["Sp. Def"] ? (IVs["Sp. Def"] as number) : 0) +
-          (EVs["Sp. Def"] ? (EVs["Sp. Def"] as number) : 0)) *
-          parseInt(level)) /
-          100 +
-          5
-      ) *
-        (selectedNatureObj?.increasedStat == "Sp. Def"
-          ? 1.1
-          : selectedNatureObj?.decreasedStat == "Sp. Def"
-            ? 0.9
-            : 1)
-    ),
-    Speed: Math.floor(
-      Math.floor(
-        ((2 * baseStatsObj["Speed"] +
-          (IVs["Speed"] ? (IVs["Speed"] as number) : 0) +
-          (EVs["Speed"] ? (EVs["Speed"] as number) : 0)) *
-          parseInt(level)) /
-          100 +
-          5
-      ) *
-        (selectedNatureObj?.increasedStat == "Speed"
-          ? 1.1
-          : selectedNatureObj?.decreasedStat == "Speed"
-            ? 0.9
-            : 1)
-    ),
-  };
+          parseInt(level) +
+          10,
+      ),
+      Atk: Math.floor(
+        Math.floor(
+          ((2 * baseStatsObj["Atk"] +
+            (IVs["Atk"] ? (IVs["Atk"] as number) : 0) +
+            (EVs["Atk"] ? (EVs["Atk"] as number) : 0)) *
+            parseInt(level)) /
+            100 +
+            5,
+        ) *
+          (selectedNatureObj?.increasedStat == "Atk"
+            ? 1.1
+            : selectedNatureObj?.decreasedStat == "Atk"
+              ? 0.9
+              : 1),
+      ),
+      Def: Math.floor(
+        Math.floor(
+          ((2 * baseStatsObj["Def"] +
+            (IVs["Def"] ? (IVs["Def"] as number) : 0) +
+            (EVs["Def"] ? (EVs["Def"] as number) : 0)) *
+            parseInt(level)) /
+            100 +
+            5,
+        ) *
+          (selectedNatureObj?.increasedStat == "Def"
+            ? 1.1
+            : selectedNatureObj?.decreasedStat == "Def"
+              ? 0.9
+              : 1),
+      ),
+      "Sp. Atk": Math.floor(
+        Math.floor(
+          ((2 * baseStatsObj["Sp. Atk"] +
+            (IVs["Sp. Atk"] ? (IVs["Sp. Atk"] as number) : 0) +
+            (EVs["Sp. Atk"] ? (EVs["Sp. Atk"] as number) : 0)) *
+            parseInt(level)) /
+            100 +
+            5,
+        ) *
+          (selectedNatureObj?.increasedStat == "Sp. Atk"
+            ? 1.1
+            : selectedNatureObj?.decreasedStat == "Sp. Atk"
+              ? 0.9
+              : 1),
+      ),
+      "Sp. Def": Math.floor(
+        Math.floor(
+          ((2 * baseStatsObj["Sp. Def"] +
+            (IVs["Sp. Def"] ? (IVs["Sp. Def"] as number) : 0) +
+            (EVs["Sp. Def"] ? (EVs["Sp. Def"] as number) : 0)) *
+            parseInt(level)) /
+            100 +
+            5,
+        ) *
+          (selectedNatureObj?.increasedStat == "Sp. Def"
+            ? 1.1
+            : selectedNatureObj?.decreasedStat == "Sp. Def"
+              ? 0.9
+              : 1),
+      ),
+      Speed: Math.floor(
+        Math.floor(
+          ((2 * baseStatsObj["Speed"] +
+            (IVs["Speed"] ? (IVs["Speed"] as number) : 0) +
+            (EVs["Speed"] ? (EVs["Speed"] as number) : 0)) *
+            parseInt(level)) /
+            100 +
+            5,
+        ) *
+          (selectedNatureObj?.increasedStat == "Speed"
+            ? 1.1
+            : selectedNatureObj?.decreasedStat == "Speed"
+              ? 0.9
+              : 1),
+      ),
+    };
+  }, [baseStats, IVs, EVs, level, selectedNatureObj]);
+
+  useEffect(() => {
+    onChange([
+      finalStats["HP"],
+      finalStats["Atk"],
+      finalStats["Def"],
+      finalStats["Sp. Atk"],
+      finalStats["Sp. Def"],
+      finalStats["Speed"],
+    ]);
+  }, [finalStats]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     stat: Stat,
-    type: "IV" | "EV"
+    type: "IV" | "EV",
   ) => {
     var nextValue = e.target.value ? parseInt(e.target.value) : "";
     const numericValue = typeof nextValue === "number" ? nextValue : 0;
@@ -149,7 +162,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
       const totalEVWithoutCurrent = Object.entries(EVs).reduce(
         (acc, [key, val]) =>
           acc + (key === stat ? 0 : typeof val === "number" ? val : 0),
-        0
+        0,
       );
       const newTotalEV = totalEVWithoutCurrent + numericValue;
       if (newTotalEV < 509) setEVs({ ...EVs, [stat]: nextValue });
@@ -174,7 +187,7 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
     max: number,
     value: StatValue,
     stat: Stat,
-    type: "IV" | "EV"
+    type: "IV" | "EV",
   ) => (
     <input
       className={inputClassName}
@@ -212,11 +225,14 @@ export const PokemonStats = ({ baseStats }: IVEVProps) => {
             })),
           ]}
         />
-        <span className="font-semibold whitespace-nowrap">LEVEL : </span> 
+        <span className="font-semibold whitespace-nowrap">LEVEL : </span>
         <DropDown
           onSelect={setLevel}
           value={level}
-          dataSource={[{value:"50", item:<span>50</span>}, {value:"100", item:<span>100</span>}]}
+          dataSource={[
+            { value: "50", item: <span>50</span> },
+            { value: "100", item: <span>100</span> },
+          ]}
         />
       </div>
       <div className="grid grid-cols-4 gap-2">

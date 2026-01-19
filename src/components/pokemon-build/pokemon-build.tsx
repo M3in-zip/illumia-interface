@@ -4,19 +4,19 @@ import { useEffect, useState } from "react";
 import { PokemonInfo } from "../pokemon-info";
 import { PokemonStats } from "@/components/pokemon-stats";
 import { FullPageSpinner } from "../full-page-spinner";
-import { MoveList } from "../move-list";
 import { PokemonMoveSearch } from "../pokemon-move-search";
 
-interface PokemonBuildProps {
-  title?: string;
-}
-
-export const PokemonBuild = ({ title }: PokemonBuildProps) => {
+export const PokemonBuild = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<string>("rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
   const [moves, setMoves] = useState<string[]>([])
+
+  const [stats, setStats] = useState<number[]>([]);
   const [selectedMove, setSelectedMove] = useState<string>("");
-  console.log("selected move: ", selectedMove);
+
+  useEffect(() => {
+    console.log("Current Stats: ", stats);
+  }, [stats]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["pokemonData", selectedPokemon],
@@ -38,7 +38,6 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
 
   return (
     <div className="xl:w-[30%]">
-      {title && <h2 className="text-2xl mb-4">{title}</h2>}
       <PokemonSearchInput
         defaultValue={selectedPokemon}
         onClick={setSelectedPokemon}
@@ -46,7 +45,7 @@ export const PokemonBuild = ({ title }: PokemonBuildProps) => {
       {data && (
         <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
       )}
-      {data && <PokemonStats baseStats={baseStats}/>}
+      {data && <PokemonStats baseStats={baseStats} onChange={setStats}/>}
       {data && moves.length > 0 && <PokemonMoveSearch moves={moves} onClick={setSelectedMove}></PokemonMoveSearch>}
       {isLoading && <FullPageSpinner />}
     </div>

@@ -2,6 +2,8 @@ interface SidebarProps {
   visible: boolean;
 }
 
+/* TODO rework sidebar menu */
+
 export const SidebarMenu = ({ visible }: SidebarProps) => {
   return (
     /* transition-all se vuoi fare più transizioni per ogni param che cambia, ad esempio colore */

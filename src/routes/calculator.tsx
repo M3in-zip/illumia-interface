@@ -16,8 +16,8 @@ function PokemonCalculator() {
   const [dataPokemon2, setDataPokemon2] = useState({stats: [1,1,1,1,1,1], move: ""});
 
   useEffect(() => {
-    console.log("Pokemon 1 data changed: ", dataPokemon1);
-  }, [dataPokemon1]);
+    console.log("Pokemon 1 data changed: ", dataPokemon1, "Pokemon 2 data: ", dataPokemon2);
+  }, [dataPokemon1, dataPokemon2]);
 
   const { data:pokemonList, isLoading:loadingPokemonList, error:errorPokemonList } = useQuery({
     queryKey: ["pokemonList"],

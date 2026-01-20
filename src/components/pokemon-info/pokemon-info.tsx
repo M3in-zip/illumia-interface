@@ -38,7 +38,7 @@ export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
         alt="Pokemon sprite"
         className="w-[25%] pixel-art"
       />
-      <div className="flex flex-col w-[60%] gap-2">
+      <div className="flex flex-col w-full md:w-[60%] gap-2">
         {stats.map((stat) => {
           const percentage = (stat.base_stat / 255) * 100;
           const barColor = getStatColor(stat.base_stat);
@@ -46,13 +46,13 @@ export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
           return (
             <div
               key={stat.stat.name}
-              className="flex items-center gap-2 w-full"
+              className="flex items-center justify-between gap-2 w-full"
             >
-              <div className="w-[30%] text-right breaking-words">
-                {statNameMap[stat.stat.name] || stat.stat.name}:
+              <div className="text-right breaking-words text-nowrap">
+                {statNameMap[stat.stat.name] || stat.stat.name}
               </div>
 
-              <div className="w-[10%] text-left">{stat.base_stat}</div>
+              <div className="text-left text-nowrap">{stat.base_stat}</div>
 
               <div className="w-[60%] rounded h-[clamp(0.2rem,0.5vw,4rem)]">
                 <div

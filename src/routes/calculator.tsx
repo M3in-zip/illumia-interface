@@ -5,6 +5,7 @@ import { getPokemonBaseList } from "@/api/pokemon.ts";
 import { usePokemonStore } from "@/stores/pokemonStore";
 import { FullPageSpinner } from "@/components/full-page-spinner";
 import { PokemonBuild } from "@/components/pokemon-build";
+import { ModifiersCard } from "@/components/modifiers-card";
 
 export const Route = createFileRoute("/calculator")({
   component: PokemonCalculator,
@@ -43,6 +44,7 @@ function PokemonCalculator() {
     <div className="p-2 w-full flex flex-row gap-2 justify-between">
       {loadingPokemonList && <FullPageSpinner />}
       <PokemonBuild setPokemonData={setDataPokemon1}/>
+      <ModifiersCard />
       <PokemonBuild setPokemonData={setDataPokemon2}/>
     </div>
   );

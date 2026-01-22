@@ -10,10 +10,9 @@ interface DropDownProps {
   value?: string | number;
   dataSource: itemData[];
   defaultValue?: string | number;
-  removeLens?: boolean;
 }
 
-export const DropDown = ({ onSelect, value, dataSource, removeLens }: DropDownProps) => {
+export const DropDown = ({ onSelect, value, dataSource }: DropDownProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const listRef = useRef<HTMLUListElement>(null);

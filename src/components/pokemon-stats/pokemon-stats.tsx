@@ -6,6 +6,21 @@ import type { pokemonNature } from "@/stores/pokemonStore";
 export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
 const STAT_NAMES = ["HP", "Atk", "Def", "Sp. Atk", "Sp. Def", "Speed"] as const;
 export type StatValue = number | "";
+export const STAT_STAGE_MODIFIERS: Record<number, number> = {
+  [-6]: (2 / 8), // 0.25
+  [-5]: (2 / 7), // ~0.285
+  [-4]: (2 / 6), // ~0.333
+  [-3]: (2 / 5), // 0.4
+  [-2]: (2 / 4), // 0.5
+  [-1]: (2 / 3), // ~0.666
+  [0]: 1.0,    // Neutro
+  [1]: (3 / 2),  // 1.5
+  [2]: (4 / 2),  // 2.0
+  [3]: (5 / 2),  // 2.5
+  [4]: (6 / 2),  // 3.0
+  [5]: (7 / 2),  // 3.5
+  [6]: (8 / 2),  // 4.0
+} as const;
 
 interface IVEVProps {
   baseStats: number[];
@@ -63,7 +78,8 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
           ? 1.1
           : selectedNatureObj?.decreasedStat == stat
             ? 0.9
-            : 1),
+            : 1) *
+        STAT_STAGE_MODIFIERS[statChanges[stat] as number],
     );
 
   const finalStats = useMemo<Record<Stat, number>>(() => {
@@ -83,7 +99,7 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
       "Sp. Def": calculateStat("Sp. Def"),
       Speed: calculateStat("Speed"),
     };
-  }, [baseStats, IVs, EVs, level, selectedNatureObj]);
+  }, [baseStats, IVs, EVs, level, selectedNatureObj, statChanges]);
 
   useEffect(() => {
     onChange([
@@ -153,24 +169,31 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
   );
 
   const statChangesDropdown = (stat: Stat) => {
-    return (
-      <DropDown
-        removeLens
-        value={statChanges[stat]}
-        defaultValue={0}
-        onSelect={(val) =>
-          setStatChanges((prev) => ({
-            ...prev,
-            [stat]: val,
-          }))
-        }
-        dataSource={Array.from({ length: 13 }, (_, i) => {
-          const v = i - 6;
-          return { value: v, item: <span>{v}</span> };
-        })}
-      />
-    );
-  };
+  return (
+    <DropDown
+      value={statChanges[stat] as number > 0 ? `+${statChanges[stat]}` : statChanges[stat]}
+      defaultValue={0}
+      onSelect={(val) =>
+        setStatChanges((prev) => ({
+          ...prev,
+          [stat]: val,
+        }))
+      }
+      dataSource={Array.from({ length: 13 }, (_, i) => {
+        // Invertiamo l'ordine: partiamo da 6 e scendiamo a -6
+        const v = 6 - i; 
+        
+        // Formattiamo l'etichetta con il + se il numero è maggiore di 0
+        const label = v > 0 ? `+${v}` : v.toString();
+        
+        return { 
+          value: v, 
+          item: <span className="font-medium">{label}</span> 
+        };
+      })}
+    />
+  );
+};
 
   return (
     <div className="p-2">

@@ -1,33 +1,51 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface itemData {
-  value:string,
+  value:string | number,
   item:React.ReactNode
 }
 
 interface DropDownProps {
-  onSelect: (onSelect: string) => void;
-  value?: string;
+  onSelect: (onSelect: string | number) => void;
+  value?: string | number;
   dataSource: itemData[];
-  defaultValue?: string;
+  defaultValue?: string | number;
+  removeLens?: boolean;
 }
 
-export const DropDown = ({ onSelect, value, dataSource }: DropDownProps) => {
+export const DropDown = ({ onSelect, value, dataSource, removeLens }: DropDownProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+  if (selectedIndex >= 0 && listRef.current) {
+    const list = listRef.current;
+    const selectedItem = list.children[selectedIndex] as HTMLElement;
+
+    if (selectedItem) {
+      // Calcoliamo la posizione dell'item RELATIVA alla lista
+      const relativeItemTop = selectedItem.offsetTop - list.offsetTop;
+
+      // Se l'elemento è sotto
+      if (relativeItemTop + selectedItem.offsetHeight > list.scrollTop + list.clientHeight) {
+        list.scrollTop = relativeItemTop + selectedItem.offsetHeight - list.clientHeight;
+      }
+      // Se l'elemento è sopra
+      else if (relativeItemTop < list.scrollTop) {
+        list.scrollTop = relativeItemTop;
+      }
+    }
+  }
+}, [selectedIndex]);
 
   return (
     <div className="relative w-full">
       {/* Input di ricerca */}
       <div className="relative flex items-center">
-        <i className="fa-solid fa-search absolute left-3 text-slate-400"></i>{" "}
-        {/* gray icon lens */}
-        <input
-          type="text"
-          readOnly
-          value={value??"--"}
-          placeholder="Search Pokémon..."
-          className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg focus:outline-none bg-white"
+        <button
+          type="button"
+          className="flex text-left border border-slate-200 rounded-lg focus:outline-none bg-white px-1 text-nowrap truncate"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onKeyDown={(e) => {
@@ -48,19 +66,20 @@ export const DropDown = ({ onSelect, value, dataSource }: DropDownProps) => {
                 onSelect?.(selectedValue);
                 setSelectedIndex(-1);
                 setIsFocused(false);
-                (
-                  e.target as HTMLInputElement
-                ).blur(); /* rimuovi la barra lampeggiante */
+                (e.target as HTMLInputElement).blur();
               }
             }
           }}
-        />
+        >
+          {value??"--"}
+          </button>
       </div>
 
       {/* autocomplete list */}
       {isFocused && (
         <ul
-          className="absolute left-1/2 top-full transform -translate-x-1/2 -translate-y-1/2 bg-white border border-slate-200 rounded-lg shadow-xl
+          ref={listRef}
+          className="absolute top-full bg-white border border-slate-200 rounded-lg shadow-xl
              max-h-[50vh] overflow-auto whitespace-nowrap z-10 w-auto"
         >
           {dataSource.length > 0 ? (

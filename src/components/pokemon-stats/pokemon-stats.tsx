@@ -1,9 +1,10 @@
 import { usePokemonStore } from "@/stores/pokemonStore";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, Fragment } from "react";
 import { DropDown } from "../drop-down";
 import type { pokemonNature } from "@/stores/pokemonStore";
 
 export type Stat = "HP" | "Atk" | "Def" | "Sp. Atk" | "Sp. Def" | "Speed";
+const STAT_NAMES = ["HP", "Atk", "Def", "Sp. Atk", "Sp. Def", "Speed"] as const;
 export type StatValue = number | "";
 
 interface IVEVProps {
@@ -13,23 +14,25 @@ interface IVEVProps {
 
 export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
   const [selectedNature, setSelectedNature] = useState<string>("--");
-  const [IVs, setIVs] = useState<Record<Stat, StatValue>>({
-    HP: 31,
-    Atk: 31,
-    Def: 31,
-    "Sp. Atk": 31,
-    "Sp. Def": 31,
-    Speed: 31,
-  });
-  const [EVs, setEVs] = useState<Record<Stat, StatValue>>({
-    HP: 0,
-    Atk: 0,
-    Def: 0,
-    "Sp. Atk": 0,
-    "Sp. Def": 0,
-    Speed: 0,
-  });
-  const [level, setLevel] = useState<string>("50");
+  const createStatObject = <T,>(initialValue: T) => {
+    return STAT_NAMES.reduce(
+      (acc, stat) => {
+        acc[stat] = initialValue;
+        return acc;
+      },
+      {} as Record<Stat, T>,
+    );
+  };
+  const [IVs, setIVs] = useState<Record<Stat, StatValue>>(
+    createStatObject<StatValue>(31),
+  );
+  const [EVs, setEVs] = useState<Record<Stat, StatValue>>(
+    createStatObject<StatValue>(0),
+  );
+  const [level, setLevel] = useState<string | number>(50);
+  const [statChanges, setStatChanges] = useState<Record<Stat, string | number>>(
+    createStatObject<string | number>(0),
+  );
 
   const nonNeutralNatures: pokemonNature[] = usePokemonStore((state) =>
     state.getNonNeutralNatures(),
@@ -46,92 +49,39 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
     (nature) => nature.name === selectedNature,
   );
 
+  const calculateStat = (stat: Stat) =>
+    Math.floor(
+      Math.floor(
+        ((2 * baseStatsObj[stat] +
+          (IVs[stat] ? (IVs[stat] as number) : 0) +
+          (EVs[stat] ? (EVs[stat] as number) : 0) / 4) *
+          (level as number)) /
+          100 +
+          5,
+      ) *
+        (selectedNatureObj?.increasedStat == stat
+          ? 1.1
+          : selectedNatureObj?.decreasedStat == stat
+            ? 0.9
+            : 1),
+    );
+
   const finalStats = useMemo<Record<Stat, number>>(() => {
     return {
       HP: Math.floor(
         ((2 * baseStatsObj["HP"] +
           (IVs["HP"] ? (IVs["HP"] as number) : 0) +
-          ((EVs["HP"] ? (EVs["HP"] as number) : 0)/4)) *
-          parseInt(level)) /
+          (EVs["HP"] ? (EVs["HP"] as number) : 0) / 4) *
+          (level as number)) /
           100 +
-          parseInt(level) +
+          (level as number) +
           10,
       ),
-      Atk: Math.floor(
-        Math.floor(
-          ((2 * baseStatsObj["Atk"] +
-            (IVs["Atk"] ? (IVs["Atk"] as number) : 0) +
-            ((EVs["Atk"] ? (EVs["Atk"] as number) : 0)/4)) *
-            parseInt(level)) /
-            100 +
-            5,
-        ) *
-          (selectedNatureObj?.increasedStat == "Atk"
-            ? 1.1
-            : selectedNatureObj?.decreasedStat == "Atk"
-              ? 0.9
-              : 1),
-      ),
-      Def: Math.floor(
-        Math.floor(
-          ((2 * baseStatsObj["Def"] +
-            (IVs["Def"] ? (IVs["Def"] as number) : 0) +
-            ((EVs["Def"] ? (EVs["Def"] as number) : 0)/4)) *
-            parseInt(level)) /
-            100 +
-            5,
-        ) *
-          (selectedNatureObj?.increasedStat == "Def"
-            ? 1.1
-            : selectedNatureObj?.decreasedStat == "Def"
-              ? 0.9
-              : 1),
-      ),
-      "Sp. Atk": Math.floor(
-        Math.floor(
-          ((2 * baseStatsObj["Sp. Atk"] +
-            (IVs["Sp. Atk"] ? (IVs["Sp. Atk"] as number) : 0) +
-            ((EVs["Sp. Atk"] ? (EVs["Sp. Atk"] as number) : 0)/4)) *
-            parseInt(level)) /
-            100 +
-            5,
-        ) *
-          (selectedNatureObj?.increasedStat == "Sp. Atk"
-            ? 1.1
-            : selectedNatureObj?.decreasedStat == "Sp. Atk"
-              ? 0.9
-              : 1),
-      ),
-      "Sp. Def": Math.floor(
-        Math.floor(
-          ((2 * baseStatsObj["Sp. Def"] +
-            (IVs["Sp. Def"] ? (IVs["Sp. Def"] as number) : 0) +
-            ((EVs["Sp. Def"] ? (EVs["Sp. Def"] as number) : 0)/4)) *
-            parseInt(level)) /
-            100 +
-            5,
-        ) *
-          (selectedNatureObj?.increasedStat == "Sp. Def"
-            ? 1.1
-            : selectedNatureObj?.decreasedStat == "Sp. Def"
-              ? 0.9
-              : 1),
-      ),
-      Speed: Math.floor(
-        Math.floor(
-          ((2 * baseStatsObj["Speed"] +
-            (IVs["Speed"] ? (IVs["Speed"] as number) : 0) +
-            ((EVs["Speed"] ? (EVs["Speed"] as number) : 0)/4)) *
-            parseInt(level)) /
-            100 +
-            5,
-        ) *
-          (selectedNatureObj?.increasedStat == "Speed"
-            ? 1.1
-            : selectedNatureObj?.decreasedStat == "Speed"
-              ? 0.9
-              : 1),
-      ),
+      Atk: calculateStat("Atk"),
+      Def: calculateStat("Def"),
+      "Sp. Atk": calculateStat("Sp. Atk"),
+      "Sp. Def": calculateStat("Sp. Def"),
+      Speed: calculateStat("Speed"),
     };
   }, [baseStats, IVs, EVs, level, selectedNatureObj]);
 
@@ -202,19 +152,39 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
     />
   );
 
+  const statChangesDropdown = (stat: Stat) => {
+    return (
+      <DropDown
+        removeLens
+        value={statChanges[stat]}
+        defaultValue={0}
+        onSelect={(val) =>
+          setStatChanges((prev) => ({
+            ...prev,
+            [stat]: val,
+          }))
+        }
+        dataSource={Array.from({ length: 13 }, (_, i) => {
+          const v = i - 6;
+          return { value: v, item: <span>{v}</span> };
+        })}
+      />
+    );
+  };
+
   return (
     <div className="p-2">
       <div className="flex flex-row items-center gap-2 mb-2">
         <span className="font-semibold whitespace-nowrap">NATURE : </span>
         <DropDown
-          onSelect={setSelectedNature}
+          onSelect={setSelectedNature as (value: string | number) => void}
           value={selectedNature}
           dataSource={[
-            { value: "--", item: <span>--</span> },
+            { value: "--", item: <span className="font-semibold">--</span> },
             ...nonNeutralNatures.map((n) => ({
               value: n.name,
               item: (
-                <span className="flex flex-row gap-2 p-2">
+                <span className="flex flex-row gap-2">
                   <span className="font-semibold">{n.name}</span>
                   <span className="text-[#4AF594] font-semibold">
                     {n.increasedStat}
@@ -232,40 +202,48 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
           onSelect={setLevel}
           value={level}
           dataSource={[
-            { value: "50", item: <span>50</span> },
-            { value: "100", item: <span>100</span> },
+            { value: 50, item: <span>50</span> },
+            { value: 100, item: <span>100</span> },
           ]}
         />
       </div>
-      <div className="grid grid-cols-4 gap-2">
-        <span className="font-semibold">STAT</span>
-        <span></span>
-        <span className="font-semibold">IV (0-31)</span>
-        <span className="font-semibold">EV (0-252)</span>
-        <span className="whitespace-nowrap">HP : </span>
-        <span>{finalStats["HP"]}</span>
-        {customInput(0, 31, IVs.HP, "HP", "IV")}
-        {customInput(0, 252, EVs.HP, "HP", "EV", 4)}
-        <span className="whitespace-nowrap">Attack : </span>
-        <span>{finalStats["Atk"]}</span>
-        {customInput(0, 31, IVs.Atk, "Atk", "IV")}
-        {customInput(0, 252, EVs.Atk, "Atk", "EV", 4)}
-        <span className="whitespace-nowrap">Defense : </span>
-        <span>{finalStats["Def"]}</span>
-        {customInput(0, 31, IVs.Def, "Def", "IV")}
-        {customInput(0, 252, EVs.Def, "Def", "EV", 4)}
-        <span className="whitespace-nowrap">Sp. Atk : </span>
-        <span>{finalStats["Sp. Atk"]}</span>
-        {customInput(0, 31, IVs["Sp. Atk"], "Sp. Atk", "IV")}
-        {customInput(0, 252, EVs["Sp. Atk"], "Sp. Atk", "EV", 4)}
-        <span className="whitespace-nowrap">Sp. Def : </span>
-        <span>{finalStats["Sp. Def"]}</span>
-        {customInput(0, 31, IVs["Sp. Def"], "Sp. Def", "IV")}
-        {customInput(0, 252, EVs["Sp. Def"], "Sp. Def", "EV", 4)}
-        <span className="whitespace-nowrap">Speed : </span>
-        <span>{finalStats["Speed"]}</span>
-        {customInput(0, 31, IVs.Speed, "Speed", "IV")}
-        {customInput(0, 252, EVs.Speed, "Speed", "EV", 4)}
+      <div className="grid grid-cols-5 gap-2 items-center justify-items-center">
+        <span className="font-semibold justify-self-start uppercase text-xs">
+          Stat
+        </span>
+        <span className="font-semibold justify-self-start uppercase text-xs">
+          Value
+        </span>
+        <span className="font-semibold uppercase text-xs">IV</span>
+        <span className="font-semibold uppercase text-xs">EV</span>
+        <span className="font-semibold uppercase text-xs">Change</span>
+        {STAT_NAMES.map((stat) => (
+          <Fragment key={stat}>
+            {/* stat name */}
+            <span className="whitespace-nowrap justify-self-start font-medium">
+              {stat} :
+            </span>
+
+            {/* final-stat */}
+            <span className="font-semibold text-lg justify-self-start">
+              {finalStats[stat]}
+            </span>
+
+            {/* Input IV */}
+            <div className="w-full max-w-[80px]">
+              {customInput(0, 31, IVs[stat], stat, "IV")}
+            </div>
+
+            {/* Input EV */}
+            <div className="w-full max-w-[80px]">
+              {customInput(0, 252, EVs[stat], stat, "EV", 4)}
+            </div>
+            {/* Stat Change DropDown */}
+            <div className="max-w-[80px] justify-self-center">
+              {stat !== "HP" && statChangesDropdown(stat)}
+            </div>
+          </Fragment>
+        ))}
       </div>
     </div>
   );

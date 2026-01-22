@@ -29,11 +29,18 @@ export const ModifiersCard = ({
   };
 
   return (
-    <div>
-      <div className="flex flex-row items-center, justify-content">
+    <div className="flex flex-col items-center">
+      <span className="font-semibold">Weather</span>
+      <div className="flex flex-row items-center, justify-content p-2">
         {buttonCustom(leftButtonClasses, "sun", "weather")}
         {buttonCustom(middleButtonClasses, "rain", "weather")}
         {buttonCustom(rightButtonClasses, "sand", "weather")}
+      </div>
+      <div className="flex flex-row items-center, justify-content p-2">
+        {buttonCustom(leftButtonClasses, "grassy", "terrain")}
+        {buttonCustom(middleButtonClasses, "misty", "terrain")}
+        {buttonCustom(middleButtonClasses, "electric", "terrain")}
+        {buttonCustom(rightButtonClasses, "psychic", "terrain")}
       </div>
     </div>
   );

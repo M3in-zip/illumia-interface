@@ -14,7 +14,7 @@ function PokemonCalculator() {
   const setPokemonList = usePokemonStore((state) => state.setPokemonList);
   const [dataPokemon1, setDataPokemon1] = useState({stats: [1,1,1,1,1,1], move: ""});
   const [dataPokemon2, setDataPokemon2] = useState({stats: [1,1,1,1,1,1], move: ""});
-  const [modifiers, setModifiers] = useState({weather: "sun"});
+  const [modifiers, setModifiers] = useState({weather: "sun", terrain: "grassy"});
 
   useEffect(() => {
     console.log("Pokemon 1 data changed: ", dataPokemon1, "Pokemon 2 data: ", dataPokemon2);

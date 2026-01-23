@@ -8,6 +8,7 @@ import { useEffect } from "react";
 const RootLayout = () => {
   const visible = useSidebarStore((state) => state.visible);
   const detectTheme = useThemeStore((state) => state.detectTheme);
+  const theme = useThemeStore((state) => state.theme);
   useEffect(() => {
     detectTheme();
   }, []);
@@ -17,7 +18,7 @@ const RootLayout = () => {
       <div className="flex flex-col flex-1 w-full min-w-[360px] min-h-screen">
         <MainMenu />
         <hr />
-        <main className="flex-1 bg-[#aba59d] w-full">
+        <main className={`flex-1 ${theme === "dark" ? "bg-slate-500" : "bg-slate-300"} w-full`}>
           <Outlet />
         </main>
         <TanStackRouterDevtools />

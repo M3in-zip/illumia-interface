@@ -42,7 +42,6 @@ function PokemonCalculator() {
 
   return (
     <div className="relative p-2 w-full flex flex-row gap-2 justify-between">
-      {/* {loadingPokemonList && <Spinner />} */}
       <div className="lg:w-[30%] lg:min-h-[400px]">
         <PokemonBuild pokemon="kyogre" setPokemonData={setDataPokemon1}/>
       </div>

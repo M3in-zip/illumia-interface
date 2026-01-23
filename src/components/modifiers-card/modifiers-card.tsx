@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useThemeStore } from "@stores/theme-store";
 
 interface ModifiersCardProps {
   setModifiers: (modifiers: any) => void;
@@ -9,18 +9,28 @@ export const ModifiersCard = ({
   setModifiers,
   modifiers,
 }: ModifiersCardProps) => {
+  const theme = useThemeStore((state) => state.theme);
 
   const leftButtonClasses = "p-2 border-white border-2 border-r-1 rounded-l-lg";
   const rightButtonClasses = "p-2 border-white border-2 border-l-1 rounded-r-lg";
   const middleButtonClasses = "p-2 border-white border-2 border-l-1 border-r-1";
+  const baseText = theme === "dark" ? "text-white" : "text-black";
 
   const buttonCustom = (className: string, name: string, modifier: string) => {
     const active = modifiers[modifier] === name;
+    const bgClass =
+    theme === "dark"
+      ? active
+        ? "bg-slate-800"
+        : "bg-slate-500"
+      : active
+        ? "bg-slate-300"
+        : "bg-white";
 
     return(
       <button
         type="button"
-        className={`${className} ${active ? "bg-yellow-500" : "bg-gray-200"}`}
+        className={`${className} ${baseText} ${bgClass} `}
         onClick={() => {
           setModifiers({ ...modifiers, [modifier]: active? "" : name });
         }}

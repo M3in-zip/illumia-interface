@@ -1,13 +1,15 @@
 import { useNavigate } from "@tanstack/react-router";
 import { ImageButton } from "@components/image-button";
-import { useSidebarStore } from "@/stores/sidebar-store";
+import { useSidebarStore } from "@stores/sidebar-store";
+import { useThemeStore } from "@stores/theme-store";
 
 export const MainMenu = () => {
   const navigate = useNavigate();
   const toggleSidebar = useSidebarStore((state) => state.toggle);
+  const theme = useThemeStore((state) => state.theme);
 
   return (
-    <div className="w-full bg-[#aba59d]">
+    <div className={`w-full ${theme === "dark" ? "bg-slate-600" : "bg-slate-300" } shadow-md`}>
       <div className="flex flex-row flex-wrap w-full max-w-[200rem] mx-auto p-[clamp(0.5rem,2vw,1rem)] gap-[clamp(0.25rem,1.5vw,0.75rem)]">
         <ImageButton
           background="/images/bg-grass.png"

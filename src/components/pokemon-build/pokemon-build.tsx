@@ -5,6 +5,7 @@ import { PokemonInfo } from "../pokemon-info";
 import { PokemonStats } from "@/components/pokemon-stats";
 import { Spinner } from "../spinner";
 import { PokemonMoveSearch } from "../pokemon-move-search";
+import { useThemeStore } from "@stores/theme-store";
 
 interface PokemonBuildProps {
   pokemon?: string;
@@ -12,6 +13,7 @@ interface PokemonBuildProps {
 }
 
 export const PokemonBuild = ({ setPokemonData, pokemon }: PokemonBuildProps) => {
+  const theme = useThemeStore((state) => state.theme);
   const [selectedPokemon, setSelectedPokemon] = useState<string>(pokemon || "rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
   const [moves, setMoves] = useState<string[]>([])
@@ -42,7 +44,7 @@ export const PokemonBuild = ({ setPokemonData, pokemon }: PokemonBuildProps) => 
   }, [data]);
 
   return (
-    <div className="relative w-full h-full text-xs">
+    <div className={`relative w-full h-full text-xs ${theme === "dark" ? "text-white" : "text-black"}`}>
       <PokemonSearchInput
         defaultValue={selectedPokemon}
         onClick={setSelectedPokemon}

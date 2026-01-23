@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
-import { usePokemonStore } from "@/stores/pokemonStore";
+import { usePokemonStore } from "@stores/pokemonStore";
+import { useThemeStore } from "@stores/theme-store";
 
 interface pokemonSearchInputProps {
   onClick?: (pokemonName: string) => void;
@@ -10,6 +11,7 @@ export const PokemonSearchInput = ({
   onClick,
   defaultValue,
 }: pokemonSearchInputProps) => {
+  const theme = useThemeStore((state) => state.theme);
   const [search, setSearch] = useState(defaultValue || "");
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -39,7 +41,7 @@ export const PokemonSearchInput = ({
           value={search}
           onChange={handleChange}
           placeholder="Search Pokémon..."
-          className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-t-lg focus:outline-none bg-white"
+          className={`w-full pl-10 pr-4 py-2 border-2 border-slate-200 rounded-t-lg focus:outline-none ${theme === "dark" ? "bg-slate-500 text-white" : "bg-white text-black"}`}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           onKeyDown={(e) => {

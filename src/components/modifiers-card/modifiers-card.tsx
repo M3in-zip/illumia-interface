@@ -15,12 +15,14 @@ export const ModifiersCard = ({
   const middleButtonClasses = "p-2 border-white border-2 border-l-1 border-r-1";
 
   const buttonCustom = (className: string, name: string, modifier: string) => {
+    const active = modifiers[modifier] === name;
+
     return(
       <button
         type="button"
-        className={`${className} ${modifiers[modifier] === name ? "bg-yellow-500" : "bg-gray-200"}`}
+        className={`${className} ${active ? "bg-yellow-500" : "bg-gray-200"}`}
         onClick={() => {
-          setModifiers({ ...modifiers, [modifier]: name });
+          setModifiers({ ...modifiers, [modifier]: active? "" : name });
         }}
       >
         {name.toUpperCase()}

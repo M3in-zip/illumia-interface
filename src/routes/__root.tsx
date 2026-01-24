@@ -14,11 +14,11 @@ const RootLayout = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen w-screen overflow-x-auto">
+    <div className="flex flex-col min-h-screen overflow-x-auto">
       <div className="flex flex-col flex-1 w-full min-w-[360px] min-h-screen">
         <MainMenu />
         <hr />
-        <main className={`flex-1 ${theme === "dark" ? "bg-slate-500" : "bg-slate-300"} w-full`}>
+        <main className={`flex-1 ${theme === "dark" ? "bg-slate-500" : "bg-slate-300"} w-full overflow-auto`}>
           <Outlet />
         </main>
         <TanStackRouterDevtools />

@@ -12,7 +12,7 @@ export const ImageButton = ({
   background,
   onClick,
   className,
-  heightClass="min-h-[clamp(2.75rem,6vw,3.25rem)]",
+  heightClass="min-h-[clamp(2rem,4vw,3rem)]",
   text,
   icon,
 }: ImageButtonProps) => {

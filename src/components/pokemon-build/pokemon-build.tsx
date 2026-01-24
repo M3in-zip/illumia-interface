@@ -17,7 +17,8 @@ export const PokemonBuild = ({ setPokemonData, pokemon, move }: PokemonBuildProp
   const theme = useThemeStore((state) => state.theme);
   const [selectedPokemon, setSelectedPokemon] = useState<string>(pokemon || "rayquaza");
   const [baseStats, setBaseStats] = useState<number[]>([105, 150, 90, 150, 90, 95]);
-  const [moves, setMoves] = useState<string[]>([])
+  const [pokemonMoves, setPokemonMoves] = useState<string[]>([])
+  const [type, setType] = useState<string[]>([]);
 
   const [stats, setStats] = useState<number[]>([]);
   const [selectedMove, setSelectedMove] = useState<string>(move || "dragon-ascent");
@@ -38,8 +39,10 @@ export const PokemonBuild = ({ setPokemonData, pokemon, move }: PokemonBuildProp
     if (data) {
       const stats = data.stats.map((stat: any) => stat.base_stat);
       const movesNames = data.moves.map((move:{move:{name:string}}) => move.move.name);
+      const pokemonTypes = data.types.map((type:{type:{name:string}}) => type.type.name);
       setBaseStats(stats);
-      setMoves(movesNames)
+      setPokemonMoves(movesNames);
+      setType(pokemonTypes);
     }
   }, [data]);
 
@@ -50,10 +53,10 @@ export const PokemonBuild = ({ setPokemonData, pokemon, move }: PokemonBuildProp
         onClick={setSelectedPokemon}
       />
       {data && (
-        <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} />
+        <PokemonInfo sprite={data.sprites.front_default} stats={data.stats} type={type}/>
       )}
       {data && <PokemonStats baseStats={baseStats} onChange={setStats}/>}
-      {data && moves.length > 0 && <PokemonMoveSearch moves={moves} onClick={setSelectedMove} move={selectedMove}></PokemonMoveSearch>}
+      {data && pokemonMoves.length > 0 && <PokemonMoveSearch moves={pokemonMoves} onClick={setSelectedMove} move={selectedMove}></PokemonMoveSearch>}
       {isLoading && <Spinner />}
     </div>
   );

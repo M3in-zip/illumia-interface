@@ -10,9 +10,10 @@ interface stat {
 interface SpriteStatsProps {
   sprite: string;
   stats: stat[];
+  type?: string[];
 }
 
-export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
+export const PokemonInfo = ({ sprite, stats, type }: SpriteStatsProps) => {
   const statNameMap: Record<string, string> = {
     hp: "HP",
     attack: "Attack",
@@ -33,11 +34,25 @@ export const PokemonInfo = ({ sprite, stats }: SpriteStatsProps) => {
 
   return (
     <div className="flex flex-col md:flex-row items-center gap-4 w-full p-2 justify-between">
+      <div className="w-[25%] flex flex-col items-center">
       <img
         src={sprite}
         alt="Pokemon sprite"
-        className="w-[25%] pixel-art"
+        className="pixel-art"
       />
+      {type && (
+        <div className="mt-2 flex gap-2">
+          {type.map((t) => (
+            <span
+              key={t}
+              className={`px-2 py-1 ${t} text-white rounded-full border-2 border-white text-xs font-semibold`}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+      </div>
       <div className="flex flex-col w-full md:w-[60%] gap-2">
         {stats.map((stat) => {
           const percentage = (stat.base_stat / 255) * 100;

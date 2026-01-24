@@ -147,7 +147,7 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
     }
   };
 
-  const inputClassName = "border-2 border-white rounded-md";
+  const inputClassName = "border-2 border-white rounded-md focus:outline-none";
   const customInput = (
     min: number,
     max: number,
@@ -261,16 +261,16 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
             </span>
 
             {/* Input IV */}
-            <div className="w-full max-w-[80px]">
+            <div>
               {customInput(0, 31, IVs[stat], stat, "IV")}
             </div>
 
             {/* Input EV */}
-            <div className="w-full max-w-[80px]">
+            <div>
               {customInput(0, 252, EVs[stat], stat, "EV", 4)}
             </div>
             {/* Stat Change DropDown */}
-            <div className="max-w-[80px] justify-self-center">
+            <div className="justify-self-center">
               {stat !== "HP" && statChangesDropdown(stat)}
             </div>
           </Fragment>

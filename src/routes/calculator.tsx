@@ -41,11 +41,11 @@ function PokemonCalculator() {
 
   return (
     <div className="relative p-2 w-full flex flex-row gap-2 justify-between">
-      <div className="lg:w-[30%] lg:min-h-[400px]">
+      <div className="">
         <PokemonBuild pokemon="kyogre" move="origin-pulse" setPokemonData={setDataPokemon1}/>
       </div>
       <ModifiersCard modifiers={modifiers} setModifiers={setModifiers}/>
-      <div className="lg:w-[30%]">
+      <div className="">
         <PokemonBuild pokemon="groudon" move="precipice-blades" setPokemonData={setDataPokemon2}/>
       </div>
     </div>

@@ -11,7 +11,7 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
   const selectedMove = moves.find((current) => current.name === move);
 
   return (
-    <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 ${
+    <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 min-w-220 ${
               selectedMove?.type.toLowerCase()}-card cursor-pointer justify-between`}
               onMouseDown={onClick ? () => onClick(move) : undefined}>
 

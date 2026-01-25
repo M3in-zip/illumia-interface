@@ -12,6 +12,7 @@ interface DropDownProps {
   dataSource: itemData[];
   defaultValue?: string | number;
   bgRemove?: boolean;
+  className?: string;
 }
 
 export const DropDown = ({
@@ -19,6 +20,7 @@ export const DropDown = ({
   value,
   dataSource,
   bgRemove,
+  className,
 }: DropDownProps) => {
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -51,7 +53,7 @@ export const DropDown = ({
   }, [selectedIndex]);
 
   return (
-    <div className="relative w-full">
+    <div className={"relative w-full" + (className ? ` ${className}` : "")}>
       {/* Input di ricerca */}
       <div className="relative flex items-center">
         <button

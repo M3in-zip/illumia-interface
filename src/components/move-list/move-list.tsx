@@ -6,7 +6,7 @@ interface MoveListProps {
 }
 
 export const MoveList = ({ moves, onClick }: MoveListProps) => {
-  return (<div className="p-2">
+  return (<div className="w-full">
     {moves.map((move, index) => (
       <MoveCard key={index} move={move} onClick={onClick} />
     ))}

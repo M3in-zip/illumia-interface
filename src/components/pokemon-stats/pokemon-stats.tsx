@@ -147,7 +147,7 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
     }
   };
 
-  const inputClassName = "border-2 border-white rounded-md focus:outline-none";
+  const inputClassName = "border-2 border-white rounded-md focus:outline-none w-full min-w-10 max-w-14";
   const customInput = (
     min: number,
     max: number,
@@ -171,6 +171,7 @@ export const PokemonStats = ({ baseStats, onChange }: IVEVProps) => {
   const statChangesDropdown = (stat: Stat) => {
     return (
       <DropDown
+        className="min-w-10 max-w-16"
         value={
           (statChanges[stat] as number) > 0
             ? `+${statChanges[stat]}`

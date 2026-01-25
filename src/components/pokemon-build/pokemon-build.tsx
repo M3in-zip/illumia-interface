@@ -47,7 +47,7 @@ export const PokemonBuild = ({ setPokemonData, pokemon, move }: PokemonBuildProp
   }, [data]);
 
   return (
-    <div className={`relative w-full h-full text-xs ${theme === "dark" ? "text-white" : "text-black"}`}>
+    <div className={`relative w-full min-w-[240px] h-full text-xs ${theme === "dark" ? "text-white" : "text-black"}`}>
       <PokemonSearchInput
         defaultValue={selectedPokemon}
         onClick={setSelectedPokemon}

@@ -25,15 +25,13 @@ export const PokemonMoveSearch = ({
   const filteredMoves = moves.filter((move) => move.startsWith(start));
 
   return (
-    <div className="p-2">
+    <div className="flex flex-col p-2 relative">
       <div className="flex flex-row items-center gap-2 mb-2">
-        <div className="flex flex-row gap-2 items-center">
         {selectedMove && <div className="font-semibold">Selected move: </div>}
         <div
           className={`border-primary text-primary font-semibold rounded-lg p-1 ${selectedMove?.type.toLowerCase()}-card`}
         >
           {selectedMove?.name}
-        </div>
         </div>
         <input
           className="border-2 border-white rounded-lg focus:outline-none focus:ring-0 p-1"
@@ -45,7 +43,11 @@ export const PokemonMoveSearch = ({
           onBlur={() => setListVisible(false)}
         />
       </div>
-      {listVisible && <MoveList moves={filteredMoves} onClick={onClick} />}
+      {listVisible && (
+        
+          <MoveList moves={filteredMoves} onClick={onClick} />
+
+      )}
     </div>
   );
 };

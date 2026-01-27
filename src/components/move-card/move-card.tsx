@@ -1,5 +1,4 @@
 import moves from "@/data/moves.json";
-import { useThemeStore } from "@stores/theme-store";
 
 export interface move {}
 
@@ -9,7 +8,6 @@ interface MoveCardProps {
 }
 
 export const MoveCard = ({ move, onClick }: MoveCardProps) => {
-  const theme = useThemeStore((state) => state.theme);
   const selectedMove = moves.find((current) => current.name === move);
   const moveIconSrc = (damage_class: string) => {
   switch (damage_class.toLowerCase()) {
@@ -25,32 +23,34 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
 };
 
   return (
-    <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 min-w-220 ${
-              selectedMove?.type.toLowerCase()}-card cursor-pointer justify-between`}
+    <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 ${
+              selectedMove?.type.toLowerCase()}-card cursor-pointer`}
               onMouseDown={onClick ? () => onClick(move) : undefined}>
 
       {/* first block */}
-      <div className="flex flex-col justify-between flex-1">
+      <div className="flex flex-col">
 
-        {/* name + type */}
-        <div className="flex flex-row items-center gap-2 justify-between">
-          <span className="font-semibold text-2xl">
+        {/* name + type + damage class */}
+        <div className="flex flex-row items-center gap-2">
+          {/* name */}
+          <span className="font-semibold text-lg">
             {selectedMove?.name
               ? selectedMove.name
               : "name not found"}
           </span>
+          {/* type badge */}
           <div
-            className={`border-primary text-primary font-semibold rounded-full py-1 px-3 flex ${
+            className={`border-primary text-primary font-semibold rounded-full py-1 px-2 flex ${
               selectedMove?.type.toLowerCase()}`}
           >
             {selectedMove?.type.toUpperCase() || "???"}
           </div>
-          <div className="border-2 border-white rounded-lg bg-gray-300">
+          {/* damage class icon */}
+          <div className="border-2 border-white rounded-lg bg-gray-300 w-6 h-6 items-center flex justify-center">
             {selectedMove?.damage_class && (
               <img
                 src={moveIconSrc(selectedMove.damage_class) || ""}
                 alt={selectedMove.damage_class}
-                className="w-6 h-6"
               />
             )}
           </div>
@@ -74,9 +74,7 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
       </div>
 
       {/* description */}
-      <div className="flex w-[50%]">
-      <p>{selectedMove?.description}</p>
-      </div>
+      <div className="break-words max-w-[100px]">{selectedMove?.description}</div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import moves from "@/data/moves.json";
+import { useThemeStore } from "@stores/theme-store";
 
 export interface move {}
 
@@ -8,7 +9,20 @@ interface MoveCardProps {
 }
 
 export const MoveCard = ({ move, onClick }: MoveCardProps) => {
+  const theme = useThemeStore((state) => state.theme);
   const selectedMove = moves.find((current) => current.name === move);
+  const moveIconSrc = (damage_class: string) => {
+  switch (damage_class.toLowerCase()) {
+    case "physical":
+      return "https://img.pokemondb.net/images/icons/move-physical.png";
+    case "special":
+      return "https://img.pokemondb.net/images/icons/move-special.png";
+    case "status":
+      return "https://img.pokemondb.net/images/icons/move-status.png";
+    default:
+      return null;
+  }
+};
 
   return (
     <div className={`border-primary rounded-xl p-1 flex flex-row items-center gap-4 min-w-220 ${
@@ -30,6 +44,15 @@ export const MoveCard = ({ move, onClick }: MoveCardProps) => {
               selectedMove?.type.toLowerCase()}`}
           >
             {selectedMove?.type.toUpperCase() || "???"}
+          </div>
+          <div className="border-2 border-white rounded-lg bg-gray-300">
+            {selectedMove?.damage_class && (
+              <img
+                src={moveIconSrc(selectedMove.damage_class) || ""}
+                alt={selectedMove.damage_class}
+                className="w-6 h-6"
+              />
+            )}
           </div>
         </div>
 
